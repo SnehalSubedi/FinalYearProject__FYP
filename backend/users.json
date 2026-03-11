@@ -1,0 +1,18 @@
+[
+  {
+    "id": "dce4a94d-71e8-485d-b272-7d747f37869e",
+    "full_name": "Suman Lama",
+    "email": "sl2296450@gmail.com",
+    "username": "peter",
+    "hashed_password": "$2b$12$r/PU/STDT.bY2oYnsfvPKOx08vdGTl.O0qivQPba6ULuQqRwRkqXu",
+    "is_active": true
+  },
+  {
+    "id": "3cdc5826-bef5-4bd0-8581-c63c1ff7da5a",
+    "full_name": "Snehal Subedi",
+    "email": "sl2296499@gmail.com",
+    "username": "snehal",
+    "hashed_password": "$2b$12$4SVQni5CZ.lEOSOFLEwHO.289laIVTiMnuUxuSOBB7PRveaDwnqkq",
+    "is_active": true
+  }
+]
