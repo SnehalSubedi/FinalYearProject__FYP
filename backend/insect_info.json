@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Fall Armyworms",
+    "description": "Fall armyworms (Spodoptera frugiperda) are destructive caterpillars that feed on over 80 plant species, especially corn, rice, and sorghum. They can cause extensive crop damage in a short period.",
+    "affected_crops": "Corn, rice, sorghum, wheat, cotton, vegetables, grasses",
+    "damage": "Larvae chew through leaves, stems, and reproductive parts of plants. They create ragged holes in leaves and can destroy entire fields of crops within days. Young larvae skeletonize leaves while older larvae consume entire leaf blades.",
+    "prevention": "Plant early in the season to avoid peak infestation periods. Use pheromone traps for early detection. Maintain crop diversity and rotate crops regularly. Encourage natural predators like parasitic wasps and ground beetles. Remove crop residues after harvest.",
+    "treatment": "Apply Bacillus thuringiensis (Bt) based biopesticides for early-stage larvae. Use spinosad or chlorantraniliprole insecticides for heavy infestations. Neem oil sprays can deter egg-laying adults. Apply insecticides in the early morning or late evening when larvae are most active."
+  },
+  {
+    "name": "Western Corn Rootworms",
+    "description": "Western corn rootworms (Diabrotica virgifera virgifera) are one of the most economically damaging corn pests in North America. Adults are small yellowish-green beetles, and larvae feed on corn roots.",
+    "affected_crops": "Corn (primary host), occasionally soybeans and other crops",
+    "damage": "Larvae feed on corn roots, reducing the plant's ability to absorb water and nutrients. This causes lodging (plants falling over), reduced yield, and goose-necking of stalks. Adults feed on corn silks, pollen, and leaves.",
+    "prevention": "Rotate crops — avoid continuous corn planting. Use Bt-corn hybrids with rootworm-resistant traits. Monitor adult beetle populations with sticky traps. Plant cover crops to disrupt the pest's lifecycle.",
+    "treatment": "Apply soil-applied insecticides (clothianidin, tefluthrin) at planting. Use seed treatments with neonicotinoids. For adult control, apply foliar insecticides when beetle counts exceed thresholds. Entomopathogenic nematodes can provide biological control of larvae."
+  },
+  {
+    "name": "Colorado Potato Beetles",
+    "description": "Colorado potato beetles (Leptinotarsa decemlineata) are major pests of potato crops worldwide. Both adults and larvae feed voraciously on foliage and can completely defoliate plants.",
+    "affected_crops": "Potatoes (primary), tomatoes, eggplants, peppers, and other solanaceous crops",
+    "damage": "Adults and larvae feed on leaves, causing complete defoliation if left unchecked. Defoliated plants produce significantly smaller tubers. Heavy infestations during tuber formation can reduce yields by 50-100%.",
+    "prevention": "Rotate crops and avoid planting solanaceous crops in the same field consecutively. Use row covers early in the season. Mulch with straw to impede beetle movement. Encourage predators like ladybugs and lacewings. Hand-pick beetles and egg masses in small gardens.",
+    "treatment": "Apply spinosad or Bacillus thuringiensis var. tenebrionis (Btt) for organic control. Use neem-based insecticides for repellent effects. Rotate chemical classes to prevent resistance — alternate between pyrethroids, neonicotinoids, and diamides. Apply treatments when larvae are small for best results."
+  },
+  {
+    "name": "Thrips",
+    "description": "Thrips are tiny, slender insects (order Thysanoptera) that feed on a wide range of plants by puncturing cells and sucking up contents. They are also vectors of plant viruses like Tomato spotted wilt virus.",
+    "affected_crops": "Onions, tomatoes, peppers, strawberries, cotton, flowers, citrus, and many ornamental plants",
+    "damage": "Feeding causes silvery or bronze streaking on leaves, distorted growth, and scarred fruit. Thrips transmit devastating viruses including TSWV (Tomato spotted wilt virus) and IYSV (Iris yellow spot virus). Heavy infestations reduce crop quality and marketability.",
+    "prevention": "Use reflective mulches to deter thrips. Install blue or yellow sticky traps for monitoring. Remove weeds and crop debris that harbor thrips. Use resistant plant varieties when available. Avoid over-fertilizing with nitrogen, which promotes lush growth attractive to thrips.",
+    "treatment": "Apply spinosad-based insecticides for effective thrips control. Use insecticidal soaps or horticultural oils for minor infestations. Introduce predatory mites (Amblyseius cucumeris) or minute pirate bugs (Orius spp.) for biological control. Systemic insecticides like imidacloprid can protect new growth."
+  },
+  {
+    "name": "Corn Earworms",
+    "description": "Corn earworms (Helicoverpa zea) are among the most costly crop pests in North America. The larvae feed on corn ears, tomatoes, cotton bolls, and many other crops.",
+    "affected_crops": "Corn, tomatoes, cotton, soybeans, peppers, lettuce, and many vegetables",
+    "damage": "Larvae tunnel into corn ears through the silk channel, feeding on kernels at the tip. On tomatoes, they bore into fruits causing rot and making them unmarketable. In cotton, they damage bolls and reduce fiber quality. Feeding wounds also invite secondary infections.",
+    "prevention": "Plant corn varieties with tight husks that resist earworm entry. Use pheromone traps to monitor moth flights and time treatments. Plant trap crops like sorghum to divert earworms. Encourage parasitoid wasps (Trichogramma spp.) that attack earworm eggs.",
+    "treatment": "Apply Bt insecticides (Bacillus thuringiensis var. kurstaki) at first silk emergence. Mineral oil applied to silk tips can suffocate young larvae. Use pyrethroid or carbamate insecticides for heavy infestations, timed 3-5 days after peak moth activity. Spray in the evening when moths are active."
+  },
+  {
+    "name": "Cabbage Loopers",
+    "description": "Cabbage loopers (Trichoplusia ni) are green caterpillars named for their distinctive 'looping' movement. They are generalist feeders that attack cruciferous vegetables and many other crops.",
+    "affected_crops": "Cabbage, broccoli, cauliflower, kale, lettuce, tomatoes, potatoes, cucumbers, and other vegetables",
+    "damage": "Larvae chew large, irregular holes in leaves, often leaving only veins. Heavy feeding can destroy developing heads of cabbage and broccoli. They produce copious frass (droppings) that contaminates produce. Young plants can be killed outright by severe infestations.",
+    "prevention": "Use floating row covers to exclude adult moths. Plant trap crops like mustard to draw loopers away from main crops. Encourage natural enemies including parasitic wasps, spiders, and birds. Inspect undersides of leaves regularly for eggs and small larvae.",
+    "treatment": "Bacillus thuringiensis (Bt) sprays are highly effective against young larvae. Use spinosad for organic control of larger larvae. Introduce Trichogramma wasps to parasitize eggs. For severe outbreaks, apply chlorantraniliprole or emamectin benzoate. Hand-pick larvae in small-scale gardens."
+  },
+  {
+    "name": "Armyworms",
+    "description": "Armyworms (Mythimna unipuncta) are caterpillars that feed in large groups and can march across fields in army-like formations, devastating crops in their path.",
+    "affected_crops": "Grasses, wheat, corn, rice, oats, barley, lawns, pastures, and hay fields",
+    "damage": "Larvae feed on leaves, stems, and seed heads of grasses and cereals. They can strip entire fields overnight when populations are high. Seedlings and young plants are most vulnerable. In lawns and turf, they create large brown patches that may resemble drought damage.",
+    "prevention": "Monitor fields regularly, especially after periods of drought followed by rain. Use pheromone traps to detect moth flights early. Maintain healthy turf with proper mowing height. Encourage natural predators like ground beetles, birds, and parasitic flies. Mow borders and grassy areas to reduce egg-laying sites.",
+    "treatment": "Apply Bt (Bacillus thuringiensis) when larvae are small (less than 1 inch). Use carbaryl or bifenthrin for fast knockdown of large larvae. Treat in late afternoon or evening when caterpillars are actively feeding. Mow a strip around infested areas to create a barrier that slows larval movement."
+  },
+  {
+    "name": "Brown Marmorated Stink Bugs",
+    "description": "Brown marmorated stink bugs (Halyomorpha halys) are invasive pests from Asia that feed on over 100 plant species. They have characteristic brown marbled coloring and emit a foul odor when disturbed.",
+    "affected_crops": "Apples, peaches, pears, tomatoes, peppers, soybeans, corn, grapes, citrus, and many ornamental plants",
+    "damage": "Adults and nymphs pierce plant tissue with needle-like mouthparts and suck juices, causing dimpled, discolored areas ('cat-facing') on fruits. Damaged fruits become unmarketable. In soybeans and corn, feeding reduces seed quality. They also invade homes in fall seeking winter shelter.",
+    "prevention": "Install exclusion netting around high-value fruit crops. Seal cracks and openings in buildings to prevent overwintering invasion. Use pheromone traps for population monitoring. Plant trap crops like sunflowers or mustard to attract bugs away from main crops. Encourage natural enemies including parasitoid wasps (Trissolcus japonicus).",
+    "treatment": "Apply pyrethroid or neonicotinoid insecticides to crop borders where bugs first appear. Use kaolin clay sprays as a deterrent on fruit trees. Organic options include pyrethrin sprays and neem oil. For home invasions, vacuum bugs rather than crushing them (to avoid odor). Biological control with samurai wasps is being developed."
+  },
+  {
+    "name": "Tomato Hornworms",
+    "description": "Tomato hornworms (Manduca quinquemaculata) are large green caterpillars with white V-shaped markings and a prominent horn on their rear end. They are voracious feeders on solanaceous plants.",
+    "affected_crops": "Tomatoes (primary), peppers, eggplants, potatoes, and tobacco",
+    "damage": "Larvae consume large amounts of foliage rapidly, often defoliating entire branches overnight. They also feed on green fruits, creating large, deep gouges. A single hornworm can defoliate an entire tomato plant if left unchecked. Dark green droppings on leaves indicate their presence.",
+    "prevention": "Rotate crops to disrupt the pupal stage in soil. Till the soil in fall and spring to destroy overwintering pupae. Interplant with basil, marigolds, or dill to repel adult moths. Use UV/blacklight traps to catch adult moths. Inspect plants regularly, checking undersides of leaves.",
+    "treatment": "Hand-pick caterpillars — they are large and easy to spot despite camouflage. Apply Bt (Bacillus thuringiensis var. kurstaki) while larvae are young. Leave hornworms that have white cocoons (parasitic wasp pupae) on them — these wasps are natural predators. Use spinosad for organic control. As a last resort, use carbaryl or permethrin sprays."
+  },
+  {
+    "name": "Citrus Canker",
+    "description": "Citrus canker is a bacterial disease caused by Xanthomonas citri that also attracts certain pest insects. The Asian citrus leafminer and other insects spread the bacteria and worsen infections.",
+    "affected_crops": "All citrus species including oranges, lemons, limes, grapefruits, and mandarins",
+    "damage": "Causes raised, corky lesions on leaves, stems, and fruit surrounded by oily, water-soaked margins and yellow halos. Severe infections cause defoliation, premature fruit drop, and blemished fruit that is unmarketable. The disease spreads rapidly through wind-driven rain and insect activity.",
+    "prevention": "Use certified disease-free nursery stock. Establish windbreaks to reduce bacterial spread through rain splash. Control citrus leafminer to reduce wound sites for bacterial entry. Disinfect pruning tools between trees. Avoid working in orchards when foliage is wet.",
+    "treatment": "Apply copper-based bactericides (copper hydroxide, copper sulfate) preventively during flush growth and before storms. Prune and destroy infected plant parts, cutting well below visible symptoms. In severe cases, remove and burn entire trees to prevent spread. Combine copper sprays with citrus leafminer control for best results."
+  },
+  {
+    "name": "Aphids",
+    "description": "Aphids are small, soft-bodied insects that feed by sucking plant sap. They reproduce rapidly (up to 12 offspring per day) and can form massive colonies that weaken plants and transmit viruses.",
+    "affected_crops": "Nearly all crops including vegetables, fruits, ornamentals, cereals, and legumes — especially roses, peppers, tomatoes, potatoes, and brassicas",
+    "damage": "Aphids extract phloem sap causing stunted growth, curled and yellowed leaves, and wilting. They excrete honeydew that promotes sooty mold growth. Many species transmit devastating plant viruses (over 200 viruses). Heavy infestations can kill young plants and significantly reduce yields.",
+    "prevention": "Encourage natural predators: ladybugs, lacewings, hoverflies, and parasitic wasps. Use reflective mulches to confuse and repel aphids. Avoid excessive nitrogen fertilization, which promotes succulent new growth. Companion plant with garlic, chives, or nasturtiums. Inspect new transplants before introducing them to the garden.",
+    "treatment": "Blast colonies off with a strong stream of water. Apply insecticidal soap or neem oil sprays, ensuring thorough coverage of leaf undersides. Release purchased ladybugs or lacewing larvae for biological control. For severe infestations, use systemic insecticides like imidacloprid or acetamiprid. Horticultural oil sprays suffocate aphids on contact."
+  },
+  {
+    "name": "Corn Borers",
+    "description": "Corn borers (primarily European corn borer, Ostrinia nubilalis) are moth larvae that tunnel into corn stalks, ears, and other crop stems, causing significant structural and yield damage.",
+    "affected_crops": "Corn (primary), peppers, potatoes, snap beans, hops, and over 200 other plant species",
+    "damage": "Larvae bore into stalks causing breakage and lodging. They tunnel through ear shanks causing ear drop. Internal feeding disrupts nutrient and water transport. Stalk tunneling creates entry points for fungi (Fusarium, Gibberella) that produce mycotoxins. Yield losses can exceed 25% in severe infestations.",
+    "prevention": "Plant Bt-corn hybrids for built-in protection. Shred and incorporate corn stalks after harvest to destroy overwintering larvae. Use pheromone traps to monitor moth flights and time treatments. Maintain early and late planting dates to reduce susceptibility during peak egg-laying periods.",
+    "treatment": "Time insecticide applications to target first-generation larvae before they bore into stalks (usually mid-June). Apply Bt sprays (Bacillus thuringiensis var. kurstaki) or granules into leaf whorls. Use Trichogramma wasp releases to parasitize eggs. Chemical options include bifenthrin, lambda-cyhalothrin, or chlorantraniliprole applied at egg hatch."
+  },
+  {
+    "name": "Fruit Flies",
+    "description": "Fruit flies (family Tephritidae, including Drosophila species) are major pests of fruit and vegetable crops worldwide. Females lay eggs inside ripening fruit, and larvae feed inside, causing rot.",
+    "affected_crops": "Mangoes, citrus, guavas, apples, peaches, tomatoes, peppers, cucumbers, melons, and most soft fruits",
+    "damage": "Female flies puncture fruit skin to lay eggs, creating entry points for bacteria and fungi. Larvae feed inside fruit, causing internal breakdown, premature dropping, and complete fruit rot. Infested fruit is unmarketable and can spread infestations rapidly. Some species are quarantine pests affecting international trade.",
+    "prevention": "Use pheromone or protein bait traps for early detection. Harvest fruit promptly when ripe — don't leave fallen fruit on the ground. Use fruit bagging for high-value crops. Apply kaolin clay coatings to create a physical barrier. Maintain orchard sanitation by removing all infested and dropped fruit.",
+    "treatment": "Use protein bait sprays (GF-120) mixed with spinosad as a spot treatment. Apply malathion or dimethoate cover sprays during peak fly activity. Use the sterile insect technique (SIT) where available. Mass trapping with methyl eugenol or cue-lure soaked traps can reduce populations. Biological control with parasitoid wasps (Fopius arisanus) is effective in some regions."
+  },
+  {
+    "name": "Africanized Honey Bees (Killer Bees)",
+    "description": "Africanized honey bees are hybrid bees that are more aggressive and defensive than European honey bees. While important pollinators, they pose a serious safety threat to farm workers and livestock.",
+    "affected_crops": "All crops requiring pollination — they are beneficial as pollinators but dangerous due to aggressive behavior near farming operations",
+    "damage": "Unlike typical pests, Africanized bees don't damage crops directly. Their danger lies in aggressive defensive behavior — they attack in large numbers when their colony is disturbed, posing life-threatening risk to farm workers, livestock, and nearby residents. Swarms can take over existing bee colonies and equipment.",
+    "prevention": "Inspect property regularly for wild colonies in walls, trees, and equipment. Keep areas around buildings well-maintained to reduce nesting sites. Be cautious with loud equipment (tractors, mowers) near potential nesting sites. Wear light-colored clothing in the field. Have an emergency plan and bee sting kits available. Contact professional beekeepers for colony management.",
+    "treatment": "If a colony is found on the farm, contact a professional pest control operator or beekeeper experienced with Africanized bees — do NOT attempt removal yourself. If attacked, run in a straight line to shelter (building or vehicle) and cover your face. Avoid jumping into water. After stinging incidents, seek immediate medical attention, especially for allergic individuals. Trapping programs using pheromone lures can help manage feral colonies."
+  },
+  {
+    "name": "Spider Mites",
+    "description": "Spider mites (family Tetranychidae, especially Tetranychus urticae — two-spotted spider mite) are tiny arachnids that feed on plant cells. They thrive in hot, dry conditions and can explode in population rapidly.",
+    "affected_crops": "Tomatoes, strawberries, beans, peppers, melons, cucumbers, ornamental plants, fruit trees, cotton, and cannabis",
+    "damage": "Mites pierce individual plant cells and extract contents, causing stippling (tiny white/yellow dots) on leaves. Heavy infestations produce visible webbing, leaf bronzing, defoliation, and plant death. Populations can double every 3-5 days in warm weather. Mite feeding reduces photosynthesis and crop quality.",
+    "prevention": "Maintain adequate irrigation — drought-stressed plants are most susceptible. Avoid broad-spectrum insecticides that kill natural predators. Spray plants with water regularly to increase humidity and dislodge mites. Introduce predatory mites (Phytoseiulus persimilis, Neoseiulus californicus) early in the season. Keep field margins free of dusty conditions.",
+    "treatment": "Apply miticides (abamectin, bifenazate, or spiromesifen) — rotate chemical classes to prevent resistance. Use horticultural oil or insecticidal soap sprays with thorough coverage of leaf undersides. Release predatory mites for biological control in greenhouses and high tunnels. Sulfur-based sprays are effective but avoid using in temperatures above 90°F. In severe cases, remove and destroy heavily infested plants to prevent spread."
+  }
+]

@@ -14,5 +14,13 @@
     "username": "snehal",
     "hashed_password": "$2b$12$4SVQni5CZ.lEOSOFLEwHO.289laIVTiMnuUxuSOBB7PRveaDwnqkq",
     "is_active": true
+  },
+  {
+    "id": "6e58d5bc-928f-4efd-afa6-f50097a08baf",
+    "full_name": "Shishir Subedi",
+    "email": "shishirsubedi@gmail.com",
+    "username": "shishir_sir",
+    "hashed_password": "$2b$12$wbr205lCE7EDvm90LWMw7eLj4AZZidF/Bxw8pS5f1bJ6uf1xJl3Iq",
+    "is_active": true
   }
 ]

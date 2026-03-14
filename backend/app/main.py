@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.core.config import settings
-from app.api.routes import auth, disease, realtime
+from app.api.routes import auth, disease, realtime, insect, weed
 
 # ─────────────────────────────────────────
 # Lifespan Events
@@ -52,6 +52,8 @@ app.add_middleware(
 app.include_router(auth.router,     prefix="/api/v1")
 app.include_router(disease.router,  prefix="/api/v1")
 app.include_router(realtime.router, prefix="/api/v1")
+app.include_router(insect.router,   prefix="/api/v1")
+app.include_router(weed.router,     prefix="/api/v1")
 
 # ─────────────────────────────────────────
 # Health Check

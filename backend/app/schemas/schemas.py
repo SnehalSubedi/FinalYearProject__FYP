@@ -87,3 +87,45 @@ class DiseasePredictionResponse(BaseModel):
     is_healthy: bool
     cause: Optional[str] = None
     cure: Optional[str] = None
+
+
+# ─────────────────────────────────────────
+# Insect & Pest Detection Schemas
+# ─────────────────────────────────────────
+
+class InsectPredictionResponse(BaseModel):
+    insect_name: str
+    confidence: float
+    confidence_percentage: str
+    description: Optional[str] = None
+    affected_crops: Optional[str] = None
+    damage: Optional[str] = None
+    prevention: Optional[str] = None
+    treatment: Optional[str] = None
+
+
+# ─────────────────────────────────────────
+# Crop & Weed Detection Schemas
+# ─────────────────────────────────────────
+
+class WeedBoundingBox(BaseModel):
+    x: float
+    y: float
+    width: float
+    height: float
+    confidence: float
+    class_id: str
+    label: str
+    color: str
+
+
+class WeedSummary(BaseModel):
+    total: int
+    weeds: int
+    crops: int
+    weed_percentage: float
+
+
+class WeedPredictionResponse(BaseModel):
+    predictions: list[WeedBoundingBox]
+    summary: WeedSummary

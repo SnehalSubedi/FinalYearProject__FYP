@@ -5,11 +5,14 @@ passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 python-multipart==0.0.9
 pillow==10.3.0
-numpy==1.26.4
-tensorflow==2.16.1
+numpy>=2.0.0
+tensorflow>=2.18.0
 python-dotenv==1.0.1
 pydantic[email]==2.7.1
 pydantic-settings==2.2.1
 ultralytics==8.0.230
-opencv-python==4.9.0.80
+opencv-python>=4.10.0.84
 websockets==12.0
+transformers>=4.38.0
+torch>=2.1.0
+inference-sdk>=0.9.0

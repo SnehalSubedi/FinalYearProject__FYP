@@ -42,6 +42,26 @@ export default function Navbar() {
             >
               Real-Time Detection
             </Link>
+            <Link
+              to="/insect"
+              className={`text-sm font-medium transition-colors ${
+                isActive('/insect')
+                  ? 'text-primary-600'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Insect Detection
+            </Link>
+            <Link
+              to="/weed"
+              className={`text-sm font-medium transition-colors ${
+                isActive('/weed')
+                  ? 'text-primary-600'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Weed Detection
+            </Link>
           </div>
         )}
 

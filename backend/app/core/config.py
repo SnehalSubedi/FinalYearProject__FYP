@@ -19,6 +19,14 @@ class Settings(BaseSettings):
     IMAGE_SIZE: int = 224
     DISEASE_INFO_PATH: str = "disease_info.json"
 
+    # Hugging Face — Insect Detection
+    HUGGINGFACEHUB_ACCESS_TOKEN: str = ""
+    INSECT_INFO_PATH: str = "insect_info.json"
+
+    # Roboflow — Weed Detection
+    ROBOFLOW_API_KEY: str = "3kdalezU6SoaRmHmvmAG"
+    WEED_TARGET_FPS: int = 2
+
     # YOLOv8 Real-Time Detection
     YOLO_MODEL_PATH: str = "yolov8n.pt"
     IP_CAM_URL: str = "http://10.64.50.165:8080/video"

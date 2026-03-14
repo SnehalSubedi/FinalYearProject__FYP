@@ -5,6 +5,8 @@ import LoginPage    from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import DiseasePage  from './pages/DiseasePage'
 import RealtimePage  from './pages/RealtimePage'
+import InsectPage    from './pages/InsectPage'
+import WeedPage      from './pages/WeedPage'
 
 // ── Protected Route ────────────────────────────────────
 // Redirects to /login if user is not authenticated
@@ -40,6 +42,14 @@ function AppRoutes() {
       
       <Route path="/realtime" element={
         <ProtectedRoute><RealtimePage /></ProtectedRoute>
+      } />
+
+      <Route path="/insect" element={
+        <ProtectedRoute><InsectPage /></ProtectedRoute>
+      } />
+
+      <Route path="/weed" element={
+        <ProtectedRoute><WeedPage /></ProtectedRoute>
       } />
 
       {/* Catch all unknown routes */}

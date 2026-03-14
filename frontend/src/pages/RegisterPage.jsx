@@ -31,8 +31,9 @@ export default function RegisterPage() {
     } catch (err) {
       const detail = err.response?.data?.detail
       if (Array.isArray(detail)) {
-        // Pydantic validation errors
-        toast.error(detail[0]?.msg || 'Validation error.')
+        // Pydantic v2 prefixes custom errors with "Value error, " — strip it
+        const raw = detail[0]?.msg || 'Validation error.'
+        toast.error(raw.replace(/^Value error,\s*/i, ''))
       } else {
         toast.error(detail || 'Registration failed. Please try again.')
       }
@@ -96,6 +97,9 @@ export default function RegisterPage() {
               className="input-field"
               autoComplete="username"
             />
+            <p className="text-xs text-gray-400 mt-1">
+              Lowercase letters, numbers, and underscores only (e.g. john_doe123).
+            </p>
           </div>
 
           <div>
