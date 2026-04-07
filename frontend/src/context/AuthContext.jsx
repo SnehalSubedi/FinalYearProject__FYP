@@ -14,7 +14,21 @@ export function AuthProvider({ children }) {
     return stored ? JSON.parse(stored) : null
   })
 
-  // ── Register ──────────────────────────────────────────
+  // ── Send OTP ─────────────────────────────────────────
+  const sendOtp = async (formData) => {
+    const res = await api.post('/auth/send-otp', formData)
+    return res.data
+  }
+
+  // ── Verify OTP & Register ────────────────────────────
+  const verifyOtp = async (phone, otp) => {
+    const res = await api.post('/auth/verify-otp', { phone, otp })
+    toast.success('Account created! Please log in.')
+    navigate('/login')
+    return res.data
+  }
+
+  // ── Register (legacy) ────────────────────────────────
   const register = async (formData) => {
     const res = await api.post('/auth/register', formData)
     toast.success('Account created! Please log in.')
@@ -34,7 +48,7 @@ export function AuthProvider({ children }) {
 
     setUser(user)
     toast.success(`Welcome back, ${user.full_name}!`)
-    navigate('/disease')
+    navigate('/home')
   }
 
   // ── Logout ────────────────────────────────────────────
@@ -54,7 +68,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register }}>
+    <AuthContext.Provider value={{ user, login, logout, register, sendOtp, verifyOtp }}>
       {children}
     </AuthContext.Provider>
   )

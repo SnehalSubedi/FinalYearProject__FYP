@@ -22,5 +22,150 @@
     "username": "shishir_sir",
     "hashed_password": "$2b$12$wbr205lCE7EDvm90LWMw7eLj4AZZidF/Bxw8pS5f1bJ6uf1xJl3Iq",
     "is_active": true
+  },
+  {
+    "id": "2d46916c-9103-4bf2-a95c-382a037b48e1",
+    "full_name": "Suyog shrestha",
+    "email": "suyogshrestha@gmail.com",
+    "username": "suyog_shrestha1",
+    "hashed_password": "$2b$12$3D2j4LOdL8z2sobt1BpmGORddcCZD.UET.bJTfwuPB6t50BRni3he",
+    "is_active": true
+  },
+  {
+    "id": "4462f5e5-75ee-4c40-91e7-aa461aba5dda",
+    "full_name": "Sidhartha Singh12",
+    "email": "sidharthasingh@gmail.com",
+    "username": "sidhartha",
+    "hashed_password": "$2b$12$a1QAo5rGd/HFCSIq6X.aM.LZAqi6SkPmGN51UieQOwj8FMwXl4Uui",
+    "is_active": true
+  },
+  {
+    "id": "878b07ff-c4ed-4848-a8ce-e5b79c9cd5cd",
+    "full_name": "suyog bhattarai@",
+    "email": "suyogbhattarai@gmail.com",
+    "username": "suyogbhattarai",
+    "hashed_password": "$2b$12$iieGRiftaF.BTFlH5u.hVei5SNoY6veuLSOUZI7EJ24fiz6XQKsuG",
+    "is_active": true
+  },
+  {
+    "id": "8360f5dd-9b68-4b80-ae94-bc8c436cdf4c",
+    "full_name": "sugam shrestha",
+    "email": "sugamshrestha@hello.com",
+    "username": "sugamshrestha",
+    "hashed_password": "$2b$12$/8xDO5R/TAanARqUYoZIMOj22OuyL0hpHLHJ.h.KaUwsQ8t7OuLyq",
+    "is_active": true
+  },
+  {
+    "id": "0c691b71-5f4a-4558-80a3-6d42485cfdb1",
+    "full_name": "kayosh pradhan",
+    "email": "12345678@hello.com",
+    "username": "kayoshpradhan",
+    "hashed_password": "$2b$12$efqEkbWy.EjsrBtUn4XcqODuf58YNDRjXHgZP.VWZNXRHU/feczUS",
+    "is_active": true
+  },
+  {
+    "id": "443d1e14-9dc1-4432-95f7-b13bf7154420",
+    "full_name": "avsihkar devkkota",
+    "email": "!#$%^&*@gmail.com",
+    "username": "avishkardevkota",
+    "hashed_password": "$2b$12$CaqDs4sna2C0szigxzM2Hu9d0CDvp2m80WD4GJKjRz0A.RngKGcTy",
+    "is_active": true
+  },
+  {
+    "id": "72a353b2-a1a4-4d2a-8739-8e44006349a1",
+    "full_name": "ojaswi shrestha",
+    "email": "ojaswishrestha@gmail.com",
+    "username": "12345667",
+    "hashed_password": "$2b$12$thjkRDFx21Qc4GM8Sum1SeSqGLrr4tyiquCFmSQ3y3qKHHqKyOVsG",
+    "is_active": true
+  },
+  {
+    "id": "4932fc8d-b892-4d90-8940-1a2a094785c7",
+    "full_name": "suman Subedi",
+    "email": "subedi007@gmail.com",
+    "username": "sumansubedi",
+    "hashed_password": "$2b$12$0QM0KoSeYPamncXz/lLQiuup6RsMMLaqzrxRVLPmuaRU0yJ2Btnge",
+    "is_active": true
+  },
+  {
+    "id": "5d8d6d16-fbd3-46d9-94e1-3c01f3f95084",
+    "full_name": "sanskar shrestha",
+    "email": "sanskar@gmail.com",
+    "username": "sumanlama",
+    "hashed_password": "$2b$12$eGnE2MthtySnhDUa1VOKw.GZRBadnvii596hHyd2OIj0I.sLreWmC",
+    "is_active": true
+  },
+  {
+    "id": "778cbc6b-31eb-4dd3-b6d4-ef013cb89220",
+    "full_name": "sulav paudel",
+    "email": "sulavpaudel@gmail.com",
+    "username": "12345678",
+    "hashed_password": "$2b$12$13iXsSNiPf0PJQFsmT3YOuf3EYaegMTXP4V/hmEROpwSYY/FhO82e",
+    "is_active": true
+  },
+  {
+    "id": "7e33948d-19dc-48ff-b04e-af4776d41be1",
+    "full_name": "kanta aryal",
+    "email": "kantaaryal@gmail.com",
+    "username": "kantaaryal",
+    "hashed_password": "$2b$12$2esihFXmHKgg64QxbvyKDOW9ue3P/95mqwuBGn9s/EPHqxeAw22Au",
+    "is_active": true
+  },
+  {
+    "id": "303f2eee-45ed-4421-ba01-d8bf6773a5d9",
+    "full_name": "suresh regmi",
+    "email": "sureshregmi@gmail.com",
+    "username": "aureshregmi",
+    "hashed_password": "$2b$12$yuqEnU6mZbZxGlV4iYrRY.wFaz64UVXshYGdIgPwNVjboIOODasXi",
+    "is_active": true
+  },
+  {
+    "id": "95f802a6-b447-4d76-998d-a08e770ad87c",
+    "full_name": "silabant sharma",
+    "email": "silabantshrma@gmail.com",
+    "username": "silabantsharma",
+    "hashed_password": "$2b$12$5QtLu8j2UV8dTH2fanC/KO3Tfo0B0OMvg7F/D5cJrjTD57Q9zDJ5q",
+    "is_active": true
+  },
+  {
+    "id": "10fef2f3-e988-4461-9323-e18480caa676",
+    "full_name": "roshan pokharael",
+    "email": "roshanpokharel@gmail.com",
+    "username": "roshanpoks",
+    "hashed_password": "$2b$12$zTMlZphshgVZnkxfEf54k.Rrwpv2Ck9sQorbhTM7A4ZEpaay9hTJu",
+    "is_active": true
+  },
+  {
+    "id": "8bd8dd0d-2e18-4310-b304-1feb43264bf3",
+    "full_name": "rohit pokharel",
+    "email": "rohit@gmail.com",
+    "username": "rohitpoks",
+    "hashed_password": "$2b$12$FBW1EsUwUkF2Xb3cy.3zcOzwmckjy1gg60pz6Tdjuqh3QBWSjM5sq",
+    "is_active": true
+  },
+  {
+    "id": "663153e3-0450-4201-a12f-b19bd14bd043",
+    "full_name": "pragyan rayamajhi",
+    "email": "pragyan@gmail.com",
+    "username": "pragyan12",
+    "hashed_password": "$2b$12$FizO08JUyrnN.rXUdkk6IeJb/A.HXRK8czKBSGOnuyrPgOURsmKnm",
+    "is_active": true
+  },
+  {
+    "id": "3be8dca7-1282-4e65-8ea8-d5df2b79ed58",
+    "full_name": "naisha",
+    "email": "naishasubedi@gmail.com",
+    "username": "naishasubedi",
+    "hashed_password": "$2b$12$h/DwplZ1hyRob3JnOnhAfucTbO5jf.5DnkxjyLYgFRwi5E510WJV2",
+    "is_active": true
+  },
+  {
+    "id": "8bc277f8-ba12-41ac-8769-79275d109a9a",
+    "full_name": "Peter Lama",
+    "email": "peterlama@gmail.com",
+    "username": "peterparker1",
+    "phone": "9841822176",
+    "hashed_password": "$2b$12$aLyxe2r5sHy0WRsLuLSGY.6OrNpqowZVE9J4DhSh9PdQTwua9ktry",
+    "is_active": true
   }
 ]

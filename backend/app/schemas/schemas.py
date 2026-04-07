@@ -12,6 +12,7 @@ class UserRegisterRequest(BaseModel):
     email: EmailStr
     username: str
     password: str
+    phone: str
 
     @field_validator("full_name")
     @classmethod
@@ -42,13 +43,108 @@ class UserRegisterRequest(BaseModel):
             raise ValueError("Password must contain at least one number.")
         return v
 
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v: str) -> str:
+        v = v.strip()
+        if not re.match(r"^9[678]\d{8}$", v):
+            raise ValueError("Please enter a valid 10-digit Nepali phone number (e.g. 98XXXXXXXX).")
+        return v
+
+
+class UserUpdateRequest(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, v):
+        if v is not None:
+            v = v.strip()
+            if len(v) < 2:
+                raise ValueError("Full name must be at least 2 characters.")
+        return v
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v):
+        if v is not None:
+            v = v.strip()
+            if not re.match(r"^9[678]\d{8}$", v):
+                raise ValueError("Please enter a valid 10-digit Nepali phone number (e.g. 98XXXXXXXX).")
+        return v
+
 
 class UserResponse(BaseModel):
     id: str
     full_name: str
     email: str
     username: str
+    phone: str
     is_active: bool
+
+
+# ─────────────────────────────────────────
+# OTP Schemas
+# ─────────────────────────────────────────
+
+class SendOTPRequest(BaseModel):
+    full_name: str
+    email: EmailStr
+    username: str
+    password: str
+    phone: str
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, v: str) -> str:
+        v = v.strip()
+        if len(v) < 2:
+            raise ValueError("Full name must be at least 2 characters.")
+        return v
+
+    @field_validator("username")
+    @classmethod
+    def validate_username(cls, v: str) -> str:
+        v = v.strip().lower()
+        if len(v) < 3:
+            raise ValueError("Username must be at least 3 characters.")
+        if not re.match(r"^[a-z0-9_]+$", v):
+            raise ValueError("Username can only contain letters, numbers, and underscores.")
+        return v
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters.")
+        if not any(c.isupper() for c in v):
+            raise ValueError("Password must contain at least one uppercase letter.")
+        if not any(c.isdigit() for c in v):
+            raise ValueError("Password must contain at least one number.")
+        return v
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v: str) -> str:
+        v = v.strip()
+        if not re.match(r"^9[678]\d{8}$", v):
+            raise ValueError("Please enter a valid 10-digit Nepali phone number (e.g. 98XXXXXXXX).")
+        return v
+
+
+class VerifyOTPRequest(BaseModel):
+    phone: str
+    otp: str
+
+    @field_validator("otp")
+    @classmethod
+    def validate_otp(cls, v: str) -> str:
+        v = v.strip()
+        if not re.match(r"^\d{6}$", v):
+            raise ValueError("OTP must be a 6-digit code.")
+        return v
 
 
 # ─────────────────────────────────────────

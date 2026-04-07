@@ -7,6 +7,9 @@ import DiseasePage  from './pages/DiseasePage'
 import RealtimePage  from './pages/RealtimePage'
 import InsectPage    from './pages/InsectPage'
 import WeedPage      from './pages/WeedPage'
+import ProfilePage   from './pages/ProfilePage'
+import HomePage      from './pages/HomePage'
+import LeafBackground from './components/LeafBackground'
 
 // ── Protected Route ────────────────────────────────────
 // Redirects to /login if user is not authenticated
@@ -16,10 +19,10 @@ function ProtectedRoute({ children }) {
 }
 
 // ── Public Route ───────────────────────────────────────
-// Redirects to /disease if user is already logged in
+// Redirects to /home if user is already logged in
 function PublicRoute({ children }) {
   const { user } = useAuth()
-  return user ? <Navigate to="/disease" replace /> : children
+  return user ? <Navigate to="/home" replace /> : children
 }
 
 // ── App Routes ─────────────────────────────────────────
@@ -36,6 +39,10 @@ function AppRoutes() {
         <PublicRoute><RegisterPage /></PublicRoute>
       } />
 
+      <Route path="/home" element={
+        <ProtectedRoute><HomePage /></ProtectedRoute>
+      } />
+
       <Route path="/disease" element={
         <ProtectedRoute><DiseasePage /></ProtectedRoute>
       } />
@@ -50,6 +57,10 @@ function AppRoutes() {
 
       <Route path="/weed" element={
         <ProtectedRoute><WeedPage /></ProtectedRoute>
+      } />
+
+      <Route path="/profile" element={
+        <ProtectedRoute><ProfilePage /></ProtectedRoute>
       } />
 
       {/* Catch all unknown routes */}
@@ -70,7 +81,10 @@ export default function App() {
             style: { fontSize: '14px' },
           }}
         />
-        <AppRoutes />
+        <LeafBackground />
+        <div className="relative z-10">
+          <AppRoutes />
+        </div>
       </AuthProvider>
     </BrowserRouter>
   )

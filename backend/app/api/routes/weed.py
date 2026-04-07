@@ -69,10 +69,12 @@ async def weed_realtime_stream(
     websocket: WebSocket,
     token: str = Query(...),
     confidence: float = Query(default=0.3, ge=0.1, le=0.95),
+    cam_url: str = Query(default=""),
 ):
     """
     Real-time weed detection from IP camera via WebSocket.
     Sends alternating JSON metadata + binary JPEG frames.
+    Client can pass cam_url to override default IP camera address.
     """
     # ── Authenticate via token query param ──
     if is_token_blacklisted(token):
@@ -87,7 +89,11 @@ async def weed_realtime_stream(
     await websocket.accept()
 
     try:
-        await stream_weed_detections(websocket, confidence_threshold=confidence)
+        await stream_weed_detections(
+            websocket,
+            confidence_threshold=confidence,
+            cam_url=cam_url if cam_url else None,
+        )
     except WebSocketDisconnect:
         pass
     except Exception as e:

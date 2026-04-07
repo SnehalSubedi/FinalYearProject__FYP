@@ -58,6 +58,15 @@ def get_user_by_id(user_id: str) -> Optional[dict]:
     return None
 
 
+def get_user_by_phone(phone: str) -> Optional[dict]:
+    """Find a user by their phone number."""
+    users = _read_users()
+    for user in users:
+        if user.get("phone") == phone:
+            return user
+    return None
+
+
 # ─────────────────────────────────────────
 # User Creation
 # ─────────────────────────────────────────
@@ -74,6 +83,7 @@ def create_user(data: UserRegisterRequest) -> dict:
         "full_name": data.full_name.strip(),
         "email": data.email.lower(),
         "username": data.username.lower(),
+        "phone": data.phone.strip(),
         "hashed_password": hash_password(data.password),
         "is_active": True,
     }
@@ -82,3 +92,20 @@ def create_user(data: UserRegisterRequest) -> dict:
     _write_users(users)
 
     return new_user
+
+
+# ─────────────────────────────────────────
+# User Update
+# ─────────────────────────────────────────
+
+def update_user(user_id: str, updates: dict) -> Optional[dict]:
+    """Update a user's profile fields and save to users.json."""
+    users = _read_users()
+    for i, user in enumerate(users):
+        if user["id"] == user_id:
+            for key, value in updates.items():
+                if value is not None:
+                    users[i][key] = value
+            _write_users(users)
+            return users[i]
+    return None

@@ -1,7 +1,7 @@
 """
 🌿 Weed Detection Service
 ==========================
-Uses Roboflow crop-and-weed-detection-gacus/1 model via inference_sdk.
+Uses Roboflow crop-and-weed-detection-gacus/1 model via direct HTTP API.
 Supports: image upload + real-time IP cam streaming via WebSocket.
 
 Classes:
@@ -11,32 +11,34 @@ Classes:
 
 import os
 import io
+import base64
 import asyncio
-import tempfile
 from typing import Any
 import cv2  # type: ignore
 import numpy as np
 from PIL import Image
-from inference_sdk import InferenceHTTPClient  # type: ignore
+import requests  # type: ignore
 from app.core.config import settings
 
 # ─────────────────────────────────────────
-# Roboflow Client Configuration
+# Roboflow API Configuration
 # ─────────────────────────────────────────
 ROBOFLOW_API_KEY = os.environ.get("ROBOFLOW_API_KEY", settings.ROBOFLOW_API_KEY)
 MODEL_ID = "crop-and-weed-detection-gacus/1"
+ROBOFLOW_API_URL = f"https://serverless.roboflow.com/{MODEL_ID}"
 
-_client = None
 
-
-def get_client() -> InferenceHTTPClient:
-    global _client
-    if _client is None:
-        _client = InferenceHTTPClient(
-            api_url="https://serverless.roboflow.com",
-            api_key=ROBOFLOW_API_KEY,
-        )
-    return _client
+def _infer_image_bytes(image_bytes: bytes) -> dict:
+    """Send image bytes to Roboflow inference API and return raw result."""
+    img_b64 = base64.b64encode(image_bytes).decode("utf-8")
+    response = requests.post(
+        ROBOFLOW_API_URL,
+        params={"api_key": ROBOFLOW_API_KEY},
+        data=img_b64,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    response.raise_for_status()
+    return response.json()
 
 
 CLASS_LABELS = {
@@ -99,33 +101,32 @@ def parse_predictions(result: Any) -> dict:
 # ─────────────────────────────────────────
 def predict_weed_from_image(image_bytes: bytes) -> dict:
     """Run weed detection on uploaded image bytes."""
-    client = get_client()
-
-    # Save to temp file for inference_sdk
-    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-        image.save(tmp, format="JPEG")
-        tmp_path = tmp.name
-
-    try:
-        result = client.infer(tmp_path, model_id=MODEL_ID)
-        return parse_predictions(result)  # type: ignore[arg-type]
-    finally:
-        os.unlink(tmp_path)
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    buf = io.BytesIO()
+    image.save(buf, format="JPEG")
+    result = _infer_image_bytes(buf.getvalue())
+    return parse_predictions(result)
 
 
 # ─────────────────────────────────────────
 # Real-Time IP Camera Stream
 # ─────────────────────────────────────────
-async def stream_weed_detections(websocket, confidence_threshold: float = 0.3):
+async def stream_weed_detections(websocket, confidence_threshold: float = 0.3, cam_url: str | None = None):
     """
     Stream weed detections from IP camera over WebSocket.
     Sends JSON metadata + annotated JPEG frames.
     """
-    client = get_client()
-    cam_url = settings.IP_CAM_URL
+    from starlette.websockets import WebSocketState
+
+    cam_url = cam_url or settings.IP_CAM_URL
     target_fps = settings.WEED_TARGET_FPS
     frame_delay = 1.0 / target_fps
+
+    def ws_connected():
+        try:
+            return websocket.client_state == WebSocketState.CONNECTED
+        except Exception:
+            return False
 
     cap = cv2.VideoCapture(cam_url)
     if not cap.isOpened():
@@ -134,30 +135,29 @@ async def stream_weed_detections(websocket, confidence_threshold: float = 0.3):
 
     frame_id = 0
     try:
-        while True:
+        while ws_connected():
             ret, frame = cap.read()
             if not ret:
+                if not ws_connected():
+                    break
                 # Try reconnect
                 cap.release()
                 await asyncio.sleep(1)
+                if not ws_connected():
+                    break
                 cap = cv2.VideoCapture(cam_url)
                 if not cap.isOpened():
-                    await websocket.send_json({"error": "Lost connection to IP camera."})
+                    if ws_connected():
+                        await websocket.send_json({"error": "Lost connection to IP camera."})
                     break
                 continue
 
             frame_id += 1
 
-            # Save frame to temp file for inference
-            with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-                cv2.imwrite(tmp.name, frame)
-                tmp_path = tmp.name
-
-            try:
-                result = await asyncio.to_thread(client.infer, tmp_path, model_id=MODEL_ID)
-                parsed = parse_predictions(result)  # type: ignore[arg-type]
-            finally:
-                os.unlink(tmp_path)
+            # Encode frame to JPEG bytes for inference
+            _, jpeg_bytes = cv2.imencode(".jpg", frame)
+            result = await asyncio.to_thread(_infer_image_bytes, jpeg_bytes.tobytes())
+            parsed = parse_predictions(result)
 
             # Filter by confidence threshold
             filtered_preds = [
@@ -190,6 +190,9 @@ async def stream_weed_detections(websocket, confidence_threshold: float = 0.3):
 
             # Encode annotated frame to JPEG
             _, jpeg_buf = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+
+            if not ws_connected():
+                break
 
             # Send JSON metadata
             await websocket.send_json({

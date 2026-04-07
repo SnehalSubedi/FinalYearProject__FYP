@@ -14,14 +14,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    # Model
-    MODEL_PATH: str = "plant_disease_recog_model_pwp.keras"
-    IMAGE_SIZE: int = 224
-    DISEASE_INFO_PATH: str = "disease_info.json"
-
-    # Hugging Face — Insect Detection
+    # Hugging Face
     HUGGINGFACEHUB_ACCESS_TOKEN: str = ""
+    DISEASE_INFO_PATH: str = "disease_info.json"
     INSECT_INFO_PATH: str = "insect_info.json"
+
+    # Aakash SMS — OTP
+    AAKASH_SMS_TOKEN: str = "e9bd05f523052b9ad8cc04a6b7536c4387afa67396b8d7b19df7dc2bbb45efd2"
+    OTP_EXPIRE_MINUTES: int = 5
 
     # Roboflow — Weed Detection
     ROBOFLOW_API_KEY: str = "3kdalezU6SoaRmHmvmAG"

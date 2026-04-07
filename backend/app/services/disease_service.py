@@ -1,18 +1,16 @@
-import numpy as np
 from PIL import Image
 import io
 import os
 import json
-import tensorflow as tf  # type: ignore
-from app.core.config import settings
+from transformers import pipeline, MobileNetV2ImageProcessor, MobileNetV2ForImageClassification
 
 # ─────────────────────────────────────────
-# Class Labels - loaded from training output
+# Disease Info — loaded from JSON
 # ─────────────────────────────────────────
-CLASS_LABELS_FILE = "class_names.json"
 DISEASE_INFO_FILE = "disease_info.json"
 
 _disease_info_cache = None
+
 
 def get_disease_info() -> dict:
     """Load disease info (cause/cure) from JSON file."""
@@ -26,63 +24,73 @@ def get_disease_info() -> dict:
             _disease_info_cache = {}
     return _disease_info_cache
 
-def get_class_labels() -> list:
-    """Load class labels from JSON file generated during training."""
-    if os.path.exists(CLASS_LABELS_FILE):
-        with open(CLASS_LABELS_FILE, "r") as f:
-            return json.load(f)
-    # Fallback to default labels if file not found
-    return [
-        "Apple___Apple_scab", "Apple___Black_rot", "Apple___Cedar_apple_rust", "Apple___healthy",
-        "Blueberry___healthy", "Cherry_(including_sour)___healthy", "Cherry_(including_sour)___Powdery_mildew",
-        "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot", "Corn_(maize)___Common_rust_",
-        "Corn_(maize)___healthy", "Corn_(maize)___Northern_Leaf_Blight", "Grape___Black_rot",
-        "Grape___Esca_(Black_Measles)", "Grape___healthy", "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
-        "Orange___Haunglongbing_(Citrus_greening)", "Peach___Bacterial_spot", "Peach___healthy",
-        "Pepper,_bell___Bacterial_spot", "Pepper,_bell___healthy", "Potato___Early_blight",
-        "Potato___healthy", "Potato___Late_blight", "Raspberry___healthy", "Soybean___healthy",
-        "Squash___Powdery_mildew", "Strawberry___healthy", "Strawberry___Leaf_scorch",
-        "Tomato___Bacterial_spot", "Tomato___Early_blight", "Tomato___healthy", "Tomato___Late_blight",
-        "Tomato___Leaf_Mold", "Tomato___Septoria_leaf_spot", "Tomato___Spider_mites Two-spotted_spider_mite",
-        "Tomato___Target_Spot", "Tomato___Tomato_mosaic_virus", "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
-    ]
+
+# ─────────────────────────────────────────
+# Label Mapping — HuggingFace label → disease_info key
+# ─────────────────────────────────────────
+HF_LABEL_TO_DISEASE_KEY = {
+    "Apple Scab": "Apple___Apple_scab",
+    "Apple with Black Rot": "Apple___Black_rot",
+    "Cedar Apple Rust": "Apple___Cedar_apple_rust",
+    "Healthy Apple": "Apple___healthy",
+    "Healthy Blueberry Plant": "Blueberry___healthy",
+    "Cherry with Powdery Mildew": "Cherry_(including_sour)___Powdery_mildew",
+    "Healthy Cherry Plant": "Cherry_(including_sour)___healthy",
+    "Corn (Maize) with Cercospora and Gray Leaf Spot": "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+    "Corn (Maize) with Common Rust": "Corn_(maize)___Common_rust_",
+    "Corn (Maize) with Northern Leaf Blight": "Corn_(maize)___Northern_Leaf_Blight",
+    "Healthy Corn (Maize) Plant": "Corn_(maize)___healthy",
+    "Grape with Black Rot": "Grape___Black_rot",
+    "Grape with Esca (Black Measles)": "Grape___Esca_(Black_Measles)",
+    "Grape with Isariopsis Leaf Spot": "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+    "Healthy Grape Plant": "Grape___healthy",
+    "Orange with Citrus Greening": "Orange___Haunglongbing_(Citrus_greening)",
+    "Peach with Bacterial Spot": "Peach___Bacterial_spot",
+    "Healthy Peach Plant": "Peach___healthy",
+    "Bell Pepper with Bacterial Spot": "Pepper,_bell___Bacterial_spot",
+    "Healthy Bell Pepper Plant": "Pepper,_bell___healthy",
+    "Potato with Early Blight": "Potato___Early_blight",
+    "Potato with Late Blight": "Potato___Late_blight",
+    "Healthy Potato Plant": "Potato___healthy",
+    "Healthy Raspberry Plant": "Raspberry___healthy",
+    "Healthy Soybean Plant": "Soybean___healthy",
+    "Squash with Powdery Mildew": "Squash___Powdery_mildew",
+    "Strawberry with Leaf Scorch": "Strawberry___Leaf_scorch",
+    "Healthy Strawberry Plant": "Strawberry___healthy",
+    "Tomato with Bacterial Spot": "Tomato___Bacterial_spot",
+    "Tomato with Early Blight": "Tomato___Early_blight",
+    "Tomato with Late Blight": "Tomato___Late_blight",
+    "Tomato with Leaf Mold": "Tomato___Leaf_Mold",
+    "Tomato with Septoria Leaf Spot": "Tomato___Septoria_leaf_spot",
+    "Tomato with Spider Mites or Two-spotted Spider Mite": "Tomato___Spider_mites Two-spotted_spider_mite",
+    "Tomato with Target Spot": "Tomato___Target_Spot",
+    "Tomato Yellow Leaf Curl Virus": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+    "Tomato Mosaic Virus": "Tomato___Tomato_mosaic_virus",
+    "Healthy Tomato Plant": "Tomato___healthy",
+}
 
 
 # ─────────────────────────────────────────
 # Model Loader — Singleton Pattern
-# Model is loaded once and reused for all requests
+# Downloads from HuggingFace on first use, then cached
 # ─────────────────────────────────────────
-_model = None
+HF_MODEL_NAME = "linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification"
+
+_classifier = None
 
 
 def load_model():
-    global _model
-    if _model is None:
-        if not os.path.exists(settings.MODEL_PATH):
-            raise FileNotFoundError(
-                f"Model not found at '{settings.MODEL_PATH}'. "
-                f"Please place '{settings.MODEL_PATH}' in the backend/ root folder."
-            )
-        _model = tf.keras.models.load_model(settings.MODEL_PATH)  # type: ignore[attr-defined]
-    return _model
-
-
-# ─────────────────────────────────────────
-# Image Preprocessing
-# ─────────────────────────────────────────
-
-def preprocess_image(image_bytes: bytes) -> np.ndarray:
-    """
-    Convert raw image bytes into a model-ready numpy array:
-    - Convert to RGB
-    - Resize to model input size (default 224x224)
-    - Normalize pixel values to [0, 1]
-    - Add batch dimension → shape: (1, H, W, 3)
-    """
-    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    image = image.resize((settings.IMAGE_SIZE, settings.IMAGE_SIZE))
-    image_array = np.array(image) / 255.0
-    return np.expand_dims(image_array, axis=0)
+    global _classifier
+    if _classifier is None:
+        image_processor = MobileNetV2ImageProcessor.from_pretrained(HF_MODEL_NAME)
+        model = MobileNetV2ForImageClassification.from_pretrained(HF_MODEL_NAME)
+        _classifier = pipeline(
+            "image-classification",
+            model=model,
+            image_processor=image_processor,
+            top_k=1,
+        )
+    return _classifier
 
 
 # ─────────────────────────────────────────
@@ -91,37 +99,35 @@ def preprocess_image(image_bytes: bytes) -> np.ndarray:
 
 def predict_disease(image_bytes: bytes) -> dict:
     """
-    Run inference on a leaf image.
-    Returns disease name, confidence score, and healthy status.
+    Run inference on a leaf image using HuggingFace model.
+    Returns disease name, confidence score, cause, and cure.
     """
-    model = load_model()
-    processed = preprocess_image(image_bytes)
-    predictions = model.predict(processed)
+    classifier = load_model()
 
-    predicted_index = int(np.argmax(predictions[0]))
-    confidence = float(np.max(predictions[0]))
-    
-    class_labels = get_class_labels()
-    disease_name = (
-        class_labels[predicted_index]
-        if predicted_index < len(class_labels)
-        else f"Unknown Class ({predicted_index})"
-    )
-    
-    # Format the disease name nicely
-    formatted_name = disease_name.replace("___", " - ").replace("_", " ")
-    
+    # Open image and convert to RGB
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+
+    # Run prediction
+    results = classifier(image)
+    top_result = results[0]
+
+    hf_label = top_result["label"]
+    confidence = top_result["score"]
+
+    # Map HuggingFace label to disease_info key
+    disease_key = HF_LABEL_TO_DISEASE_KEY.get(hf_label, "")
+
     # Get cause and cure info
     disease_info = get_disease_info()
-    info = disease_info.get(disease_name, {})
+    info = disease_info.get(disease_key, {})
     cause = info.get("cause", "Information not available.")
     cure = info.get("cure", "Information not available.")
 
     return {
-        "disease_name": formatted_name,
+        "disease_name": hf_label,
         "confidence": round(confidence, 4),
         "confidence_percentage": f"{round(confidence * 100, 2)}%",
-        "is_healthy": "healthy" in disease_name.lower(),
+        "is_healthy": "healthy" in hf_label.lower(),
         "cause": cause,
         "cure": cure,
     }

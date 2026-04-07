@@ -10,14 +10,14 @@
 
 @layer components {
   .btn-primary {
-    @apply w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed;
+    @apply w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3.5 px-5 rounded-xl text-base transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm;
+    @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-base;
   }
 
   .card {
-    @apply bg-white rounded-2xl shadow-md p-8;
+    @apply bg-white rounded-3xl shadow-lg p-10 sm:p-12;
   }
 }

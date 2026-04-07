@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nepal Disaster Alert System</title>
+
+  <!-- React & Babel (no build tool needed) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+
+  <style>
+    /* ───────────── RESET & BASE ───────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      min-height: 100vh;
+      color: #111827;
+    }
+
+    /* ───────────── LAYOUT ───────────── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .panel {
+      width: 100%;
+      max-width: 620px;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      padding: 1.75rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    /* ───────────── HEADER ───────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #f1f1f1;
+    }
+
+    .header-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #fef2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .header-sub {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    /* ───────────── FORM ELEMENTS ───────────── */
+    .section { margin-bottom: 1.25rem; }
+
+    .label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 7px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    input, textarea {
+      font-family: inherit;
+      font-size: 14px;
+      color: #111827;
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    input { height: 40px; padding: 0 12px; }
+    input:focus, textarea:focus { border-color: #f87171; }
+
+    input.mono { font-family: 'Courier New', monospace; font-size: 13px; }
+
+    textarea {
+      padding: 10px 12px;
+      min-height: 105px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .prefix {
+      height: 40px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .toggle-btn {
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      color: #6b7280;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .toggle-btn:hover { background: #f3f4f6; }
+
+    /* ───────────── ALERT TYPE GRID ───────────── */
+    .alert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .alert-btn {
+      padding: 12px 8px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .alert-btn:hover { background: #fafafa; border-color: #d1d5db; }
+
+    .alert-btn.selected {
+      border-color: #fca5a5;
+      background: #fff5f5;
+    }
+
+    .alert-btn .emoji { font-size: 22px; display: block; margin-bottom: 5px; }
+
+    .alert-btn .name {
+      font-size: 12px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .alert-btn.selected .name { color: #dc2626; }
+
+    /* ───────────── CHAR COUNT ───────────── */
+    .char-count {
+      font-size: 12px;
+      text-align: right;
+      margin-top: 5px;
+      color: #9ca3af;
+      transition: color 0.15s;
+    }
+
+    .char-count.warn  { color: #d97706; }
+    .char-count.over  { color: #dc2626; }
+
+    /* ───────────── SEND BUTTON ───────────── */
+    .send-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #fca5a5;
+      background: #fef2f2;
+      color: #dc2626;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 0.25rem;
+      transition: all 0.15s;
+    }
+
+    .send-btn:hover:not(:disabled) {
+      background: #fee2e2;
+      border-color: #f87171;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    /* ───────────── STATUS BOX ───────────── */
+    .status-box {
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .status-box.success {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .status-box.error {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .status-box.loading {
+      background: #f9fafb;
+      color: #6b7280;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* ───────────── DIVIDER ───────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid #f3f4f6;
+      margin: 1.25rem 0;
+    }
+
+    /* ───────────── SMS HISTORY ───────────── */
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .history-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .clear-btn {
+      font-size: 12px;
+      color: #9ca3af;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .clear-btn:hover { color: #dc2626; background: #fef2f2; }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #f3f4f6;
+      background: #fafafa;
+      font-size: 13px;
+    }
+
+    .history-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .history-phone { font-weight: 500; color: #374151; }
+    .history-time  { font-size: 11px; color: #9ca3af; }
+    .history-msg   { color: #6b7280; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .badge.sent    { background: #dcfce7; color: #15803d; }
+    .badge.failed  { background: #fee2e2; color: #b91c1c; }
+
+    .empty-history {
+      text-align: center;
+      color: #d1d5db;
+      font-size: 13px;
+      padding: 1rem 0;
+    }
+
+    /* ───────────── CREDIT BADGE ───────────── */
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 1rem;
+    }
+
+    .credit-badge {
+      font-size: 12px;
+      color: #6b7280;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 99px;
+      padding: 4px 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .credit-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+    }
+
+    /* ───────────── SPINNER ───────────── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #d1d5db;
+      border-top-color: #6b7280;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    /* ───────────── FOOTER ───────────── */
+    .footer {
+      margin-top: 1.25rem;
+      text-align: center;
+      font-size: 12px;
+      color: #d1d5db;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef } = React;
+
+    /* ─── Alert type definitions ─── */
+    const ALERT_TYPES = [
+      {
+        name: "Flood",
+        emoji: "🌊",
+        template: "FLOOD WARNING: High water levels detected. Please evacuate low-lying areas immediately. Emergency: 100",
+      },
+      {
+        name: "Earthquake",
+        emoji: "🏔️",
+        template: "EARTHQUAKE ALERT: Strong tremors detected near your area. Move to open spaces, away from buildings. Emergency: 1166",
+      },
+      {
+        name: "Landslide",
+        emoji: "⛰️",
+        template: "LANDSLIDE WARNING: High risk of landslide in your area. Evacuate immediately to safer ground. Emergency: 100",
+      },
+      {
+        name: "Fire",
+        emoji: "🔥",
+        template: "FIRE ALERT: Fire reported nearby. Keep away from the area. Call fire brigade: 101",
+      },
+      {
+        name: "Storm",
+        emoji: "⛈️",
+        template: "STORM WARNING: Severe weather expected in next few hours. Stay indoors and avoid travel. Emergency: 100",
+      },
+      {
+        name: "Custom",
+        emoji: "✏️",
+        template: "",
+      },
+    ];
+
+    /* ─── Helpers ─── */
+    function formatTime(date) {
+      return date.toLocaleTimeString("en-NP", { hour: "2-digit", minute: "2-digit", hour12: true });
+    }
+
+    /* ─── Main App ─── */
+    function DisasterAlertSystem() {
+      const [token,       setToken]       = useState("");
+      const [showToken,   setShowToken]   = useState(false);
+      const [message,     setMessage]     = useState("");
+      const [phone,       setPhone]       = useState("");
+      const [selectedType, setSelectedType] = useState(null);
+      const [status,      setStatus]      = useState(null);   // { type, text }
+      const [history,     setHistory]     = useState([]);
+      const [sending,     setSending]     = useState(false);
+
+      /* Select alert type → fill template */
+      const handleSelectType = (at) => {
+        setSelectedType(at.name);
+        if (at.template) setMessage(at.template);
+        setStatus(null);
+      };
+
+      /* Only digits, max 10 */
+      const handlePhone = (e) => {
+        const v = e.target.value.replace(/\D/g, "");
+        if (v.length <= 10) setPhone(v);
+      };
+
+      /* Character count style */
+      const charClass =
+        message.length > 160 ? "char-count over" :
+        message.length > 130 ? "char-count warn" : "char-count";
+
+      /* Send SMS */
+      const sendSMS = async () => {
+        setStatus(null);
+
+        if (!token.trim()) {
+          setStatus({ type: "error", text: "⚠ Please enter your Aakash SMS auth token." });
+          return;
+        }
+        if (phone.length < 10) {
+          setStatus({ type: "error", text: "⚠ Please enter a valid 10-digit Nepali phone number." });
+          return;
+        }
+        if (!message.trim()) {
+          setStatus({ type: "error", text: "⚠ Please write an alert message before sending." });
+          return;
+        }
+
+        setSending(true);
+        setStatus({ type: "loading", text: "Sending SMS to +977" + phone + "..." });
+
+        try {
+          const url =
+            `https://sms.aakashsms.com/sms/v3/send` +
+            `?auth_token=${encodeURIComponent(token)}` +
+            `&to=${encodeURIComponent(phone)}` +
+            `&text=${encodeURIComponent(message)}`;
+
+          const res  = await fetch(url);
+          const data = await res.json();
+
+          if (!data.error && data.data?.valid?.length > 0) {
+            const msgId = data.data.valid[0].id;
+            setStatus({
+              type: "success",
+              text: `✓ SMS sent to +977${phone}  •  Message ID: ${msgId}`,
+            });
+            setHistory(prev => [{
+              phone,
+              message,
+              type: selectedType || "Custom",
+              time: formatTime(new Date()),
+              status: "sent",
+              id: msgId,
+            }, ...prev].slice(0, 20));
+          } else {
+            const errMsg = data.message || "Unknown error from Aakash SMS.";
+            setStatus({ type: "error", text: "✕ Failed: " + errMsg });
+            setHistory(prev => [{
+              phone,
+              message,
+              type: selectedType || "Custom",
+              time: formatTime(new Date()),
+              status: "failed",
+            }, ...prev].slice(0, 20));
+          }
+        } catch (e) {
+          setStatus({ type: "error", text: "✕ Network error. Check your internet connection and try again." });
+        } finally {
+          setSending(false);
+        }
+      };
+
+      return (
+        <div className="page">
+          <div className="panel">
+
+            {/* ── Header ── */}
+            <div className="header">
+              <div className="header-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <div>
+                <div className="header-title">Nepal Disaster Alert System</div>
+                <div className="header-sub">Citizen SMS alerts via Aakash SMS · +977</div>
+              </div>
+            </div>
+
+            {/* ── Auth Token ── */}
+            <div className="section">
+              <div className="label">Aakash SMS Auth Token</div>
+              <div className="row">
+                <input
+                  type={showToken ? "text" : "password"}
+                  className="mono"
+                  value={token}
+                  onChange={e => setToken(e.target.value)}
+                  placeholder="Paste your auth token from aakashsms.com"
+                  style={{ flex: 1 }}
+                />
+                <button className="toggle-btn" onClick={() => setShowToken(p => !p)}>
+                  {showToken ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            <hr className="divider" />
+
+            {/* ── Alert Type ── */}
+            <div className="section">
+              <div className="label">Alert Type</div>
+              <div className="alert-grid">
+                {ALERT_TYPES.map(at => (
+                  <button
+                    key={at.name}
+                    className={"alert-btn" + (selectedType === at.name ? " selected" : "")}
+                    onClick={() => handleSelectType(at)}
+                  >
+                    <span className="emoji">{at.emoji}</span>
+                    <span className="name">{at.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* ── Message ── */}
+            <div className="section">
+              <div className="label">Alert Message</div>
+              <textarea
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                placeholder="Type your disaster alert message here..."
+              />
+              <div className={charClass}>{message.length} / 160 characters</div>
+            </div>
+
+            {/* ── Phone Number ── */}
+            <div className="section">
+              <div className="label">Recipient Phone Number</div>
+              <div className="row">
+                <span className="prefix">🇳🇵 +977</span>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={handlePhone}
+                  placeholder="98XXXXXXXX"
+                  maxLength={10}
+                  style={{ flex: 1 }}
+                />
+              </div>
+            </div>
+
+            {/* ── Send Button ── */}
+            <button className="send-btn" onClick={sendSMS} disabled={sending}>
+              {sending ? (
+                <span className="spinner" />
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              )}
+              {sending ? "Sending SMS..." : "Send Alert SMS"}
+            </button>
+
+            {/* ── Status ── */}
+            {status && (
+              <div className={"status-box " + status.type}>
+                {status.type === "loading" && <span className="spinner" />}
+                <span>{status.text}</span>
+              </div>
+            )}
+
+            {/* ── SMS History ── */}
+            {history.length > 0 && (
+              <>
+                <hr className="divider" />
+                <div className="history-header">
+                  <div className="history-title">Sent History</div>
+                  <button className="clear-btn" onClick={() => setHistory([])}>Clear</button>
+                </div>
+                <div className="history-list">
+                  {history.map((item, i) => (
+                    <div className="history-item" key={i}>
+                      <div className="history-item-top">
+                        <span className="history-phone">+977 {item.phone}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <span className={"badge " + item.status}>{item.status === "sent" ? "Sent" : "Failed"}</span>
+                          <span className="history-time">{item.time}</span>
+                        </div>
+                      </div>
+                      <div className="history-msg">{item.message}</div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* ── Footer ── */}
+            <div className="footer">
+              Nepal Disaster Alert System · Powered by Aakash SMS
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+
+    /* ─── Mount ─── */
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<DisasterAlertSystem />);
+  </script>
+</body>
+</html>

@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 async def websocket_realtime_detection(
     websocket: WebSocket,
     token: str = Query(...),
-    confidence: float = Query(0.45, ge=0.1, le=0.95)
+    confidence: float = Query(0.45, ge=0.1, le=0.95),
+    cam_url: str = Query(default=""),
 ):
     """
     WebSocket endpoint for real-time object detection.
@@ -44,16 +45,22 @@ async def websocket_realtime_detection(
         logger.info(f"WebSocket connected: user_id={user_id}, confidence={confidence}")
         
         # Start streaming
-        await stream_yolo_detections(websocket, confidence)
+        await stream_yolo_detections(websocket, confidence, cam_url=cam_url if cam_url else None)
         
     except WebSocketDisconnect:
         logger.info("WebSocket disconnected by client.")
     except Exception as e:
         logger.error(f"WebSocket error: {e}")
-        await websocket.send_json({
-            "type": "error",
-            "message": "Stream error occurred."
-        })
+        try:
+            await websocket.send_json({
+                "type": "error",
+                "message": "Stream error occurred."
+            })
+        except Exception:
+            pass
     finally:
-        await websocket.close()
+        try:
+            await websocket.close()
+        except Exception:
+            pass
         logger.info("WebSocket closed.")
