@@ -167,5 +167,32 @@
     "phone": "9841822176",
     "hashed_password": "$2b$12$aLyxe2r5sHy0WRsLuLSGY.6OrNpqowZVE9J4DhSh9PdQTwua9ktry",
     "is_active": true
+  },
+  {
+    "id": "8244471d-cf88-4a45-ab94-60b8f6116853",
+    "full_name": "Test Verify OTP",
+    "email": "verifyotp13@gmail.com",
+    "username": "verifyotp13",
+    "phone": "9803729956",
+    "hashed_password": "$2b$12$kOCVb7Jh/NGm9L1o9BH/temmFD89AXPSA5Wt5MEh6aKYpgJOtzwcK",
+    "is_active": true
+  },
+  {
+    "id": "91d3ecac-2796-41da-9d84-13ea06aefe29",
+    "full_name": "snehall",
+    "email": "sl229645011@gmail.com",
+    "username": "lama",
+    "phone": "9857037709",
+    "hashed_password": "$2b$12$kjskBCZnyai1e6D/ykKtvuTtJ4yTlXMtdeOM1FCkgeeQcDoKZaxue",
+    "is_active": true
+  },
+  {
+    "id": "85861b75-75b0-43e9-acdd-7266893ed0e6",
+    "full_name": "Mandira BIsta",
+    "email": "mandirabista007@gmail.com",
+    "username": "mandirabista",
+    "phone": "9840970999",
+    "hashed_password": "$2b$12$YRLMEPDr.eScSDqhbx8b6usvfeV2G/avJ43GBiucBuWUsm/gFg8o2",
+    "is_active": true
   }
 ]

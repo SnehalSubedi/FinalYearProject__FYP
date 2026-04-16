@@ -38,12 +38,17 @@ def _parse_camera_source(cam_url: Optional[str]) -> Union[int, str]:
     """Convert cam_url to the right type for cv2.VideoCapture.
 
     - "0", "1", etc. → int (device webcam index)
-    - Any other string → kept as URL string
+    - Any other string → kept as URL string (auto-append /video for IP Webcam app)
     - None → falls back to settings.IP_CAM_URL
     """
     source = cam_url if cam_url else settings.IP_CAM_URL
-    if isinstance(source, str) and source.strip().isdigit():
-        return int(source.strip())
+    if isinstance(source, str):
+        source = source.strip()
+        if source.isdigit():
+            return int(source)
+        # Auto-append /video for IP Webcam Android app if user only gave host:port
+        if source.startswith("http") and "/" not in source.split("://", 1)[1]:
+            source = source.rstrip("/") + "/video"
     return source
 
 

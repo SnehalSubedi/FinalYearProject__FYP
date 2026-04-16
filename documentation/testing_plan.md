@@ -1,6 +1,6 @@
 # Testing Plan
 
-The testing strategy for the PlantGuard AI-Powered Agricultural Intelligence Platform is structured into four major categories: **Unit Testing**, **System Testing**, **WebSocket and Real-Time Testing**, and **AI/ML Model Testing**. This layered approach ensures validation of individual components, integrated workflows, real-time communication, and machine learning inference functionalities.
+The testing strategy for the PlantGuard AI-Powered Agricultural Intelligence Platform is structured into two major categories: **Unit Testing** and **System Testing**. Unit Testing validates individual backend components, APIs, services, and model inference logic in isolation using the FastAPI Swagger interface. System Testing validates the complete integrated application through frontend workflows, ensuring end-to-end functionality across the React frontend and FastAPI backend.
 
 ---
 
@@ -56,7 +56,7 @@ Verify that phone numbers not matching the Nepali format (10 digits starting wit
 
 #### 1.2.6 UT-11 -- Send OTP (Weak Password)
 
-Ensure passwords that do not meet the minimum requirements (8 characters, 1 uppercase, 1 digit) are rejected during OTP request.
+Ensure passwords that do not meet the minimum requirements (8 characters, 1 uppercase letter, 1 digit) are rejected during OTP request.
 
 #### 1.2.7 UT-12 -- Send OTP (Invalid Username Format)
 
@@ -160,7 +160,7 @@ Ensure that a healthy leaf image returns `is_healthy: true` with the correspondi
 
 #### 1.4.3 UT-35 -- Disease Prediction (Diseased Plant)
 
-Verify that a diseased leaf image returns `is_healthy: false` along with accurate disease identification, cause, and treatment recommendations.
+Verify that a diseased leaf image returns `is_healthy: false` along with accurate disease identification, cause, and treatment recommendations from `disease_info.json`.
 
 #### 1.4.4 UT-36 -- Disease Prediction (Invalid File Type)
 
@@ -168,183 +168,259 @@ Ensure uploading a non-image file (e.g., PDF, TXT) returns a validation error.
 
 #### 1.4.5 UT-37 -- Disease Prediction (Oversized Image)
 
-Verify that images exceeding the maximum file size limit (10MB) are rejected.
+Verify that images exceeding the maximum file size limit (10MB) are rejected with an appropriate error.
 
 #### 1.4.6 UT-38 -- Disease Prediction (Unauthenticated Request)
 
-Ensure that disease prediction endpoint requires valid authentication.
+Ensure that the disease prediction endpoint requires valid JWT authentication and rejects unauthenticated requests with 401 status.
 
-#### 1.4.7 UT-39 -- Disease Info Lookup
+#### 1.4.7 UT-39 -- Disease Model 39-Class Coverage
 
-Verify that predicted disease names correctly map to detailed cause and cure information from the `disease_info.json` data source.
+Verify that the MobileNetV2 model correctly classifies inputs across all 39 plant disease and healthy classes covering 14 crop species (Apple, Blueberry, Cherry, Corn, Grape, Orange, Peach, Pepper, Potato, Raspberry, Soybean, Squash, Strawberry, Tomato).
+
+#### 1.4.8 UT-40 -- Disease Confidence Score Accuracy
+
+Ensure that the softmax probability output correctly represents prediction confidence and the percentage conversion is mathematically accurate.
 
 ---
 
 ### 1.5 Insect Detection Unit Tests
 
-#### 1.5.1 UT-40 -- Insect Prediction (Valid Insect Image)
+#### 1.5.1 UT-41 -- Insect Prediction (Valid Insect Image)
 
 Verify that uploading a valid insect image to `/insect/predict` returns the insect name, confidence score, description, affected crops, damage details, prevention methods, and treatment recommendations.
 
-#### 1.5.2 UT-41 -- Insect Prediction (Known Farm Pest)
+#### 1.5.2 UT-42 -- Insect Prediction (Known Farm Pest)
 
-Ensure that known pest species (e.g., Fall Armyworm, Colorado Beetle, Aphids) are correctly identified with high confidence.
+Ensure that known pest species (e.g., Fall Armyworm, Colorado Beetle, Aphids) are correctly identified with high confidence from the 15 supported insect/pest classes.
 
-#### 1.5.3 UT-42 -- Insect Prediction (Invalid File Type)
+#### 1.5.3 UT-43 -- Insect Prediction (Invalid File Type)
 
 Verify that non-image files are rejected with appropriate error messages.
 
-#### 1.5.4 UT-43 -- Insect Prediction (Unauthenticated Request)
+#### 1.5.4 UT-44 -- Insect Prediction (Unauthenticated Request)
 
-Ensure the insect prediction endpoint enforces JWT authentication.
+Ensure the insect prediction endpoint enforces JWT authentication and returns 401 for unauthorized requests.
 
-#### 1.5.5 UT-44 -- Insect Info Lookup
+#### 1.5.5 UT-45 -- Insect Info Mapping
 
-Verify that predicted insect names correctly map to detailed information (description, affected crops, damage, prevention, treatment) from the `insect_info.json` data source.
+Verify that predicted insect names correctly map to detailed information (description, affected_crops, damage, prevention, treatment) from the `insect_info.json` data source.
 
 ---
 
 ### 1.6 Weed Detection Unit Tests
 
-#### 1.6.1 UT-45 -- Weed Prediction from Image (Valid Field Image)
+#### 1.6.1 UT-46 -- Weed Prediction from Image (Valid Field Image)
 
 Verify that uploading a valid field image to `/weed/predict` returns bounding box predictions with crop/weed classifications, confidence scores, and a summary containing total detections, weed count, crop count, and weed percentage.
 
-#### 1.6.2 UT-46 -- Weed Prediction (Crop vs Weed Classification)
+#### 1.6.2 UT-47 -- Weed Prediction (Crop vs Weed Classification)
 
-Ensure the model correctly distinguishes between crops (class_id: 0, label: "Crop") and weeds (class_id: 1, label: "Weed") with appropriate color coding (green for crops, red for weeds).
+Ensure the Roboflow model correctly distinguishes between crops (class_id: 0, label: "Crop", color: green) and weeds (class_id: 1, label: "Weed", color: red).
 
-#### 1.6.3 UT-47 -- Weed Prediction (No Detections)
+#### 1.6.3 UT-48 -- Weed Prediction (No Detections)
 
 Verify that an image with no detectable crops or weeds returns an empty predictions array with zero counts in the summary.
 
-#### 1.6.4 UT-48 -- Weed Prediction (Invalid File Type)
+#### 1.6.4 UT-49 -- Weed Prediction (Invalid File Type)
 
-Ensure non-image file uploads are rejected.
+Ensure non-image file uploads are rejected with appropriate error messages.
 
-#### 1.6.5 UT-49 -- Weed Prediction (Unauthenticated Request)
+#### 1.6.5 UT-50 -- Weed Prediction (Unauthenticated Request)
 
 Verify that weed prediction requires valid JWT authentication.
 
-#### 1.6.6 UT-50 -- Weed Prediction Bounding Box Structure
+#### 1.6.6 UT-51 -- Weed Prediction Bounding Box Structure
 
-Validate that each prediction includes correct bounding box fields: x, y, width, height, confidence, class_id, label, and color.
+Validate that each prediction includes all required bounding box fields: x, y, width, height, confidence, class_id, label, and color.
+
+#### 1.6.7 UT-52 -- Weed Percentage Calculation
+
+Ensure the weed percentage calculation (weeds / total detections * 100) in the summary response is mathematically correct.
 
 ---
 
-### 1.7 Security and Token Management Unit Tests
+### 1.7 Real-Time Detection Unit Tests
 
-#### 1.7.1 UT-51 -- Access Token Creation
+#### 1.7.1 UT-53 -- Weed WebSocket Connection (Valid Token)
 
-Verify that `create_access_token()` generates a valid JWT with correct payload (sub, type, exp) using HS256 algorithm.
+Verify that connecting to `/weed/stream` with a valid JWT token in the query parameter successfully establishes a WebSocket connection and begins frame streaming.
 
-#### 1.7.2 UT-52 -- Refresh Token Creation
+#### 1.7.2 UT-54 -- Weed WebSocket Connection (Invalid Token)
+
+Ensure that connecting with an invalid or expired token results in an error message and connection closure.
+
+#### 1.7.3 UT-55 -- Weed WebSocket Connection (Missing Token)
+
+Verify that attempting WebSocket connection without a token parameter is rejected immediately.
+
+#### 1.7.4 UT-56 -- Weed WebSocket Frame Streaming (JSON Metadata)
+
+Validate that the server sends JSON messages containing frame_id, detections count, summary (total, weeds, crops, weed_percentage), and predictions array with correct bounding box data.
+
+#### 1.7.5 UT-57 -- Weed WebSocket Frame Streaming (Binary JPEG Data)
+
+Ensure that binary JPEG frames are sent alternating with JSON metadata and can be rendered on the client canvas.
+
+#### 1.7.6 UT-58 -- Weed WebSocket Confidence Threshold Parameter
+
+Verify that the `confidence` query parameter (range 0.1 to 0.95) correctly adjusts detection sensitivity during real-time weed streaming.
+
+#### 1.7.7 UT-59 -- Weed WebSocket Custom Camera URL
+
+Ensure that the `cam_url` query parameter overrides the default IP camera URL and connects to the specified camera source.
+
+#### 1.7.8 UT-60 -- YOLO WebSocket Connection and Connected Message
+
+Verify that connecting to `/realtime/detect` with a valid token sends a `"connected"` type message confirming stream initialization.
+
+#### 1.7.9 UT-61 -- YOLO WebSocket Authentication Failure
+
+Ensure invalid or expired tokens return an error message and prevent the YOLOv8 stream from starting.
+
+#### 1.7.10 UT-62 -- YOLO WebSocket Frame Message Structure
+
+Validate that each frame message includes type ("frame"), frame_id, detections count, class_counts dictionary, and size (byte length of JPEG).
+
+#### 1.7.11 UT-63 -- YOLO WebSocket Binary Frame with Annotations
+
+Verify that binary JPEG frames contain YOLOv8 bounding box annotations drawn on the original image.
+
+#### 1.7.12 UT-64 -- YOLO WebSocket Class-Wise Object Counting
+
+Ensure that `class_counts` correctly tallies each detected object class (e.g., person: 2, dog: 1) per frame.
+
+#### 1.7.13 UT-65 -- YOLO WebSocket Confidence Threshold
+
+Verify that the `confidence` parameter (default 0.45) filters out low-confidence detections from results.
+
+#### 1.7.14 UT-66 -- YOLO WebSocket Camera Source Selection
+
+Ensure the `source` parameter correctly switches between device webcam (index 0) and IP camera URL.
+
+#### 1.7.15 UT-67 -- WebSocket Connection Drop Handling
+
+Ensure the system handles camera disconnection gracefully by sending an error message and closing the WebSocket cleanly without crashing the server.
+
+#### 1.7.16 UT-68 -- WebSocket Stream Cleanup on Client Disconnect
+
+Verify that all resources (camera capture, model inference thread) are properly released when the WebSocket client disconnects.
+
+---
+
+### 1.8 Security and Token Management Unit Tests
+
+#### 1.8.1 UT-69 -- Access Token Creation
+
+Verify that `create_access_token()` generates a valid JWT with correct payload (sub, type, exp) using HS256 algorithm and 30-minute default expiry.
+
+#### 1.8.2 UT-70 -- Refresh Token Creation
 
 Ensure `create_refresh_token()` generates a token with 7-day expiry and "refresh" type in payload.
 
-#### 1.7.3 UT-53 -- Token Decode (Valid Token)
+#### 1.8.3 UT-71 -- Token Decode (Valid Token)
 
 Verify that `decode_token()` correctly extracts user ID and token type from a valid JWT.
 
-#### 1.7.4 UT-54 -- Token Decode (Expired Token)
+#### 1.8.4 UT-72 -- Token Decode (Expired Token)
 
-Ensure that decoding an expired JWT raises appropriate credentials exception.
+Ensure that decoding an expired JWT raises the appropriate credentials exception.
 
-#### 1.7.5 UT-55 -- Token Decode (Tampered Token)
+#### 1.8.5 UT-73 -- Token Decode (Tampered Token)
 
-Verify that a token with modified payload or invalid signature is rejected.
+Verify that a token with a modified payload or invalid signature is rejected.
 
-#### 1.7.6 UT-56 -- Password Hashing
+#### 1.8.6 UT-74 -- Password Hashing
 
 Ensure `hash_password()` produces a valid Bcrypt hash that differs from the plaintext input.
 
-#### 1.7.7 UT-57 -- Password Verification
+#### 1.8.7 UT-75 -- Password Verification
 
 Verify that `verify_password()` returns `True` for correct password and `False` for incorrect password.
 
-#### 1.7.8 UT-58 -- Token Blacklisting
+#### 1.8.8 UT-76 -- Token Blacklisting
 
-Ensure `blacklist_token()` adds a token to the blacklist and `is_token_blacklisted()` correctly identifies blacklisted tokens.
+Ensure `blacklist_token()` adds a token to the in-memory blacklist and `is_token_blacklisted()` correctly identifies blacklisted tokens.
 
 ---
 
-### 1.8 User Service Unit Tests
+### 1.9 User Service Unit Tests
 
-#### 1.8.1 UT-59 -- Create User
+#### 1.9.1 UT-77 -- Create User
 
-Verify that `create_user()` stores user data with a UUID, hashed password, and active status in `users.json`.
+Verify that `create_user()` stores user data with a UUID, Bcrypt-hashed password, and `is_active: true` status in `users.json`.
 
-#### 1.8.2 UT-60 -- Get User by Email
+#### 1.9.2 UT-78 -- Get User by Email
 
 Ensure `get_user_by_email()` returns the correct user record for a given email address.
 
-#### 1.8.3 UT-61 -- Get User by Username
+#### 1.9.3 UT-79 -- Get User by Username
 
-Verify `get_user_by_username()` returns the correct user record.
+Verify `get_user_by_username()` returns the correct user record for a given username.
 
-#### 1.8.4 UT-62 -- Get User by Phone
+#### 1.9.4 UT-80 -- Get User by Phone
 
 Ensure `get_user_by_phone()` returns the correct user for a given phone number.
 
-#### 1.8.5 UT-63 -- Get User by ID
+#### 1.9.5 UT-81 -- Get User by ID
 
 Verify `get_user_by_id()` returns the correct user record for a given UUID.
 
-#### 1.8.6 UT-64 -- Update User Fields
+#### 1.9.6 UT-82 -- Update User Fields
 
-Ensure `update_user()` correctly modifies user fields and persists changes to `users.json`.
+Ensure `update_user()` correctly modifies specified user fields and persists changes to `users.json`.
 
-#### 1.8.7 UT-65 -- User Not Found
+#### 1.9.7 UT-83 -- User Not Found
 
-Verify that lookup functions return `None` when no matching user exists.
-
----
-
-### 1.9 OTP Service Unit Tests
-
-#### 1.9.1 UT-66 -- OTP Generation
-
-Verify that `generate_otp()` produces a 6-digit numeric string.
-
-#### 1.9.2 UT-67 -- OTP Storage
-
-Ensure `store_otp()` correctly stores OTP with phone number, registration data, and 5-minute expiration timestamp.
-
-#### 1.9.3 UT-68 -- OTP SMS Delivery
-
-Verify that `send_otp_sms()` successfully calls the Aakash SMS API with correct parameters (token, recipient phone, OTP message).
-
-#### 1.9.4 UT-69 -- OTP Verification (Correct Code)
-
-Ensure `verify_otp()` returns the stored registration data when the correct OTP is provided.
-
-#### 1.9.5 UT-70 -- OTP Verification (Incorrect Code)
-
-Verify that `verify_otp()` returns `None` or raises error for incorrect OTP.
-
-#### 1.9.6 UT-71 -- OTP Expiry Enforcement
-
-Ensure that OTPs older than 5 minutes are rejected during verification.
+Verify that all lookup functions (`get_user_by_email`, `get_user_by_username`, `get_user_by_phone`, `get_user_by_id`) return `None` when no matching user exists.
 
 ---
 
-### 1.10 Schema Validation Unit Tests
+### 1.10 OTP Service Unit Tests
 
-#### 1.10.1 UT-72 -- UserRegisterRequest Validation (Valid Data)
+#### 1.10.1 UT-84 -- OTP Generation
 
-Verify that valid registration data passes all Pydantic validators (name >= 2 chars, username >= 3 chars alphanumeric, password >= 8 chars with uppercase and digit, phone 10-digit Nepali format).
+Verify that `generate_otp()` produces a random 6-digit numeric string.
 
-#### 1.10.2 UT-73 -- UserRegisterRequest Validation (Invalid Data)
+#### 1.10.2 UT-85 -- OTP Storage
 
-Ensure that each invalid field triggers the correct validation error message.
+Ensure `store_otp()` correctly stores OTP with phone number, registration data, and 5-minute expiration timestamp in the in-memory OTP store.
 
-#### 1.10.3 UT-74 -- LoginRequest Validation
+#### 1.10.3 UT-86 -- OTP SMS Delivery
 
-Verify that login schema accepts both username and email formats.
+Verify that `send_otp_sms()` successfully calls the Aakash SMS API with correct parameters (token, recipient phone, OTP message body).
 
-#### 1.10.4 UT-75 -- Detection Response Schema Validation
+#### 1.10.4 UT-87 -- OTP Verification (Correct Code)
 
-Ensure that DiseasePredictionResponse, InsectPredictionResponse, and WeedPredictionResponse schemas correctly serialize model outputs.
+Ensure `verify_otp()` returns the stored registration data when the correct OTP is provided within the 5-minute window.
+
+#### 1.10.5 UT-88 -- OTP Verification (Incorrect Code)
+
+Verify that `verify_otp()` returns `None` or raises an error for an incorrect OTP code.
+
+#### 1.10.6 UT-89 -- OTP Expiry Enforcement
+
+Ensure that OTPs older than 5 minutes are rejected during verification and return an expiry error.
+
+---
+
+### 1.11 Schema Validation Unit Tests
+
+#### 1.11.1 UT-90 -- UserRegisterRequest Validation (Valid Data)
+
+Verify that valid registration data passes all Pydantic validators: full name (minimum 2 characters), username (minimum 3 characters, alphanumeric and underscore only), password (minimum 8 characters with at least 1 uppercase letter and 1 digit), and phone (10-digit Nepali format starting with 98/97/96).
+
+#### 1.11.2 UT-91 -- UserRegisterRequest Validation (Invalid Data)
+
+Ensure that each invalid field triggers the correct validation error message: short name, invalid username characters, weak password, and malformed phone number.
+
+#### 1.11.3 UT-92 -- LoginRequest Validation
+
+Verify that the login schema accepts both username and email formats in the username field.
+
+#### 1.11.4 UT-93 -- Detection Response Schema Validation
+
+Ensure that DiseasePredictionResponse, InsectPredictionResponse, and WeedPredictionResponse schemas correctly serialize model outputs with all required fields.
 
 ---
 
@@ -356,458 +432,284 @@ System testing validates the complete integrated application using frontend work
 
 #### 2.1.1 ST-01 -- User Registration and OTP Flow
 
-Verify the complete registration workflow: user fills registration form (Step 1) -> submits -> receives SMS OTP -> enters 6-digit OTP in auto-focusing input fields (Step 2) -> account is created -> user is redirected to login page.
+Verify the complete registration workflow: user fills the registration form with full name, email, username, password, and phone number (Step 1) -> clicks submit -> system sends 6-digit OTP via SMS to the provided phone number -> user enters OTP in the six auto-focusing input fields (Step 2) -> account is created successfully -> user is redirected to the login page.
 
 #### 2.1.2 ST-02 -- OTP Resend Flow
 
-Validate that after the 2-minute countdown timer expires, the user can click "Resend OTP" to receive a new code, and the timer resets.
+Validate that after the 2-minute countdown timer expires, the "Resend OTP" button becomes active, and clicking it sends a new OTP code to the user's phone while resetting the countdown timer.
 
 #### 2.1.3 ST-03 -- OTP Copy-Paste Support
 
-Ensure that users can paste a 6-digit OTP code and all six input fields are automatically populated.
+Ensure that users can paste a 6-digit OTP code into the first input field and all six input fields are automatically populated with the correct digits.
 
-#### 2.1.4 ST-04 -- Login Flow
+#### 2.1.4 ST-04 -- Registration Form Validation
 
-Verify that entering valid credentials on the login page results in successful authentication, token storage in localStorage, and redirect to the home dashboard.
+Verify that the registration form displays real-time validation errors for invalid inputs: short name, invalid username, weak password, and incorrect phone format before allowing form submission.
 
-#### 2.1.5 ST-05 -- Login with 3D Background
+#### 2.1.5 ST-05 -- Login Flow
 
-Ensure the 3D plant scene (Three.js) renders correctly on the login page without blocking user interaction.
+Verify that entering valid credentials (username/email and password) on the login page results in successful authentication, access and refresh token storage in localStorage, user data persistence in AuthContext, and automatic redirect to the home dashboard.
 
-#### 2.1.6 ST-06 -- Unauthorized Access Handling
+#### 2.1.6 ST-06 -- Login Error Handling
 
-Verify that unauthenticated users attempting to access protected routes (home, disease, insect, weed, realtime, profile) are automatically redirected to the login page.
+Ensure that invalid login attempts display appropriate error toast notifications ("Invalid credentials" or "Account is deactivated") without redirecting the user.
 
-#### 2.1.7 ST-07 -- Logout Flow
+#### 2.1.7 ST-07 -- Login Page 3D Background
 
-Ensure clicking the logout button clears localStorage, invalidates the token, and redirects to the login page.
+Ensure the Three.js 3D plant scene renders correctly on the login page without blocking user interaction with the login form.
 
-#### 2.1.8 ST-08 -- Token Expiry Handling
+#### 2.1.8 ST-08 -- Unauthorized Access Handling
 
-Verify that when a 401 response is received from any API call, the Axios interceptor clears storage and redirects the user to login.
+Verify that unauthenticated users attempting to access protected routes (`/home`, `/disease`, `/insect`, `/weed`, `/realtime`, `/profile`) are automatically redirected to the login page.
+
+#### 2.1.9 ST-09 -- Logout Flow
+
+Ensure clicking the logout button in the navbar calls the backend logout endpoint, clears all tokens and user data from localStorage, resets AuthContext state, and redirects the user to the login page.
+
+#### 2.1.10 ST-10 -- Token Expiry Auto-Redirect
+
+Verify that when a 401 Unauthorized response is received from any API call, the Axios response interceptor automatically clears localStorage and redirects the user to the login page.
 
 ---
 
 ### 2.2 Home Dashboard System Tests
 
-#### 2.2.1 ST-09 -- Dashboard Load
+#### 2.2.1 ST-11 -- Dashboard Load After Login
 
-Verify that the home page loads correctly after login with animated welcome content, feature cards, and animated counters.
+Verify that the home page loads correctly after login displaying the welcome section with animated text, feature cards for all four detection capabilities, and statistical counters.
 
-#### 2.2.2 ST-10 -- Feature Card Navigation
+#### 2.2.2 ST-12 -- Feature Card Navigation
 
-Ensure clicking each feature card (Disease Detection, Real-Time Detection, Insect Detection, Weed Detection) navigates to the corresponding page.
+Ensure clicking each feature card navigates to the correct page: "Disease Detection" to `/disease`, "Real-Time Detection" to `/realtime`, "Insect Detection" to `/insect`, and "Weed Detection" to `/weed`.
 
-#### 2.2.3 ST-11 -- Animated Counters
+#### 2.2.3 ST-13 -- Animated Counters with Intersection Observer
 
-Verify that statistical counters animate from zero to target values using intersection observer when scrolled into view.
+Verify that statistical counters animate smoothly from zero to their target values when the counter section scrolls into the viewport, triggered by the Intersection Observer API.
 
-#### 2.2.4 ST-12 -- Animated Plant Growth Canvas
+#### 2.2.4 ST-14 -- Animated Plant Growth Canvas
 
-Ensure the plant growth animation renders correctly on the home page canvas element.
+Ensure the plant growth animation renders correctly on the HTML canvas element within the home page without performance issues.
 
 ---
 
 ### 2.3 Disease Detection System Tests
 
-#### 2.3.1 ST-13 -- Image Upload via Click
+#### 2.3.1 ST-15 -- Image Upload via Click
 
-Verify that clicking the upload area opens a file picker, the selected image is previewed, and the "Detect Disease" button becomes active.
+Verify that clicking the upload area opens the native file picker, selecting a leaf image displays a preview in the upload zone, and the "Detect Disease" button becomes enabled.
 
-#### 2.3.2 ST-14 -- Image Upload via Drag-and-Drop
+#### 2.3.2 ST-16 -- Image Upload via Drag-and-Drop
 
-Ensure dragging and dropping a leaf image into the upload zone displays the preview correctly.
+Ensure dragging and dropping a leaf image into the upload zone displays the image preview correctly and enables the detection button.
 
-#### 2.3.3 ST-15 -- Disease Detection Workflow
+#### 2.3.3 ST-17 -- Disease Detection End-to-End Workflow
 
-Validate the full workflow: upload image -> click "Detect Disease" -> loading spinner appears -> results display with disease name, confidence bar, cause, and cure.
+Validate the full workflow: user uploads a leaf image -> clicks "Detect Disease" -> loading spinner appears during API call -> results panel displays with disease name, confidence score with color-coded progress bar, cause description, and cure/treatment recommendations.
 
-#### 2.3.4 ST-16 -- Healthy Plant Result Display
+#### 2.3.4 ST-18 -- Healthy Plant Result Display
 
-Verify that healthy plant detections show a success indicator with health tips instead of disease information.
+Verify that when the MobileNetV2 model identifies a healthy plant, the results section displays a success indicator with the healthy classification label and general health tips instead of disease cause and cure.
 
-#### 2.3.5 ST-17 -- Diseased Plant Result Display
+#### 2.3.5 ST-19 -- Diseased Plant Result Display
 
-Ensure diseased plant results display the disease name, color-coded confidence bar, cause description, and treatment recommendations.
+Ensure that when a disease is detected, the results section displays the disease name, a color-coded confidence bar (green for high confidence, yellow for medium, red for low), the cause of the disease, and detailed treatment/cure recommendations.
 
-#### 2.3.6 ST-18 -- Image Size Validation
+#### 2.3.6 ST-20 -- Image Size Validation Error
 
-Verify that uploading an image exceeding 10MB shows an appropriate error toast notification.
+Verify that attempting to upload an image exceeding 10MB displays an error toast notification informing the user of the file size limit.
+
+#### 2.3.7 ST-21 -- Image Format Restriction
+
+Ensure only supported image formats (JPEG, PNG, WebP) can be selected in the file picker and unsupported formats are prevented from upload.
 
 ---
 
 ### 2.4 Insect Detection System Tests
 
-#### 2.4.1 ST-19 -- Insect Image Upload and Preview
+#### 2.4.1 ST-22 -- Insect Image Upload and Preview
 
-Verify that uploading an insect/pest image displays a preview and enables the detection button.
+Verify that uploading an insect/pest image displays a preview in the upload zone and enables the "Detect Insect" button.
 
-#### 2.4.2 ST-20 -- Insect Detection Workflow
+#### 2.4.2 ST-23 -- Insect Detection End-to-End Workflow
 
-Validate the complete flow: upload -> detect -> results display with insect name, confidence, affected crops, damage description, prevention, and treatment.
+Validate the complete flow: user uploads an insect image -> clicks detect -> loading spinner appears -> results display with insect name, confidence score, description, affected crops list, damage description, prevention methods, and treatment recommendations.
 
-#### 2.4.3 ST-21 -- Quick Action Guide
+#### 2.4.3 ST-24 -- Quick Action Guide Display
 
-Ensure the quick action guide section renders correctly with actionable prevention and treatment steps for farmers.
+Ensure the quick action guide section renders correctly below the detection results with actionable prevention and treatment steps formatted for farmer readability.
+
+#### 2.4.4 ST-25 -- Insect Image Format and Size Validation
+
+Verify that only supported image formats are accepted and oversized files display an appropriate error toast notification.
 
 ---
 
 ### 2.5 Weed Detection System Tests
 
-#### 2.5.1 ST-22 -- Image Upload Mode
+#### 2.5.1 ST-26 -- Image Upload Mode Detection
 
-Verify that uploading a field image in image mode displays crop/weed bounding boxes with color coding and a summary with weed percentage.
+Verify that uploading a field image in the image upload mode sends it to the Roboflow API and displays annotated bounding boxes with color coding (green for crops, red for weeds) along with a summary showing total detections, crop count, weed count, and weed percentage.
 
-#### 2.5.2 ST-23 -- Real-Time Stream Mode Activation
+#### 2.5.2 ST-27 -- Real-Time Stream Mode Activation
 
-Ensure switching to real-time mode displays IP camera URL input, confidence threshold slider, and start/stop controls.
+Ensure switching to the real-time streaming mode reveals the IP camera URL input field, confidence threshold slider (range 0.3 to 0.95), and start/stop stream control buttons.
 
-#### 2.5.3 ST-24 -- Weed Stream Start and Frame Display
+#### 2.5.3 ST-28 -- Weed Stream Start and Live Frame Display
 
-Validate that entering a camera URL and clicking "Start Stream" establishes a WebSocket connection, displays live frames on canvas, and updates detection metrics.
+Validate that entering a camera URL and clicking "Start Stream" establishes a WebSocket connection to `/weed/stream`, displays live annotated frames on the HTML canvas, and begins updating the detection metrics panel.
 
-#### 2.5.4 ST-25 -- Weed Stream Controls
+#### 2.5.4 ST-29 -- Weed Stream Confidence Threshold Control
 
-Verify confidence threshold slider (range 0.3 to 0.95) dynamically adjusts detection sensitivity during streaming.
+Verify that adjusting the confidence threshold slider during an active stream dynamically changes detection sensitivity and immediately reflects in the live detections.
 
-#### 2.5.5 ST-26 -- Live Metrics Dashboard
+#### 2.5.5 ST-30 -- Live Metrics Dashboard Update
 
-Ensure real-time metrics update correctly during streaming: frame count, total detections, live crop/weed counts, peak weeds, and weed coverage percentage.
+Ensure the live metrics panel updates in real time during weed streaming: frame count increments with each received frame, total detections accumulates, live crop and weed counts reflect the latest frame, peak weeds tracks the maximum weed count, and weed coverage percentage calculates correctly.
 
-#### 2.5.6 ST-27 -- Analytics Charts Rendering
+#### 2.5.6 ST-31 -- Weed Analytics Charts Rendering
 
-Verify that all analytics charts render correctly during and after streaming: pie chart, line chart, area chart, cumulative detections, confidence distribution bar chart, radar chart, and dual-axis chart.
+Verify that all seven analytics charts render correctly during and after streaming: crop vs weed pie chart, crops and weeds over time line chart, weed coverage trend area chart, cumulative detections chart, confidence distribution bar chart, detection overview radar chart, and detections with weed percentage dual-axis chart.
 
-#### 2.5.7 ST-28 -- Video Recording
+#### 2.5.7 ST-32 -- Weed Stream Video Recording
 
-Validate that clicking the record button captures the stream as a WebM video file and allows download.
+Validate that clicking the record button during an active weed stream captures annotated frames as a downloadable WebM video file, and clicking stop recording triggers the file download.
 
-#### 2.5.8 ST-29 -- CSV Export
+#### 2.5.8 ST-33 -- Weed Stream CSV Export
 
-Ensure the CSV export button generates a downloadable file containing detection data from the current session.
+Ensure the CSV export button generates and downloads a CSV file containing timestamped detection data (frame ID, crop count, weed count, weed percentage, confidence values) from the current streaming session.
 
-#### 2.5.9 ST-30 -- Session Summary
+#### 2.5.9 ST-34 -- Weed Stream Session Summary
 
-Verify that stopping the stream displays a session summary with aggregated statistics.
+Verify that stopping the weed stream displays a session summary panel showing total frames processed, total detections, average weed percentage, peak weed count, and session duration.
+
+#### 2.5.10 ST-35 -- Live Detection List
+
+Ensure the scrollable live detection list displays individual detection entries with labels, confidence scores, and bounding box coordinates updating in real time.
 
 ---
 
-### 2.6 Real-Time Detection System Tests
+### 2.6 Real-Time Object Detection System Tests
 
-#### 2.6.1 ST-31 -- Source Selection (Device Webcam)
+#### 2.6.1 ST-36 -- Source Selection (Device Webcam)
 
-Verify that selecting device webcam (index 0) as the source successfully connects and starts streaming.
+Verify that selecting device webcam (index 0) as the detection source and clicking "Start Stream" successfully connects to the device camera and begins streaming YOLOv8-annotated frames.
 
-#### 2.6.2 ST-32 -- Source Selection (IP Camera)
+#### 2.6.2 ST-37 -- Source Selection (IP Camera)
 
-Ensure entering a custom IP camera URL and starting the stream establishes connection and displays frames.
+Ensure that entering a custom IP camera URL in the source input field and starting the stream establishes connection to the remote camera and displays annotated detection frames.
 
-#### 2.6.3 ST-33 -- Real-Time Detection Workflow
+#### 2.6.3 ST-38 -- Real-Time Detection End-to-End Workflow
 
-Validate the full workflow: select source -> configure confidence -> start stream -> view annotated frames with bounding boxes -> see live object counts.
+Validate the full workflow: user selects camera source -> adjusts confidence threshold -> clicks "Start Stream" -> WebSocket connection established -> annotated video frames display on canvas -> live object counts update -> per-class detection bars populate.
 
-#### 2.6.4 ST-34 -- Live Object Counting Display
+#### 2.6.4 ST-39 -- Live Object Counting Display
 
-Verify that detected objects are listed with per-class counts and progress bars that update in real time.
+Verify that detected objects are listed in the object counting panel with per-class counts and progress bars that update dynamically with each received frame.
 
-#### 2.6.5 ST-35 -- FPS Monitoring
+#### 2.6.5 ST-40 -- FPS Monitoring Display
 
-Ensure current FPS and average FPS metrics display correctly and update during streaming.
+Ensure the current FPS and average FPS metrics display correctly in the metrics panel and update continuously during active streaming.
 
-#### 2.6.6 ST-36 -- Real-Time Analytics Charts
+#### 2.6.6 ST-41 -- Real-Time Analytics Charts Rendering
 
-Verify all charts render: object distribution pie chart, detections over time area chart, FPS performance line chart, composed chart with moving average, cumulative detections, radar chart, and dual-axis chart.
+Verify that all seven analytics charts render correctly: object distribution pie chart, detections over time area chart, FPS performance line chart, composed chart with moving average overlay, cumulative detections area chart, performance overview radar chart, and FPS vs detection count dual-axis chart.
 
-#### 2.6.7 ST-37 -- Stream Video Recording
+#### 2.6.7 ST-42 -- Real-Time Stream Video Recording
 
-Validate that recording during real-time detection captures annotated frames as a downloadable WebM file.
+Validate that recording during real-time object detection captures the annotated canvas frames as a downloadable WebM video file.
 
-#### 2.6.8 ST-38 -- Stream CSV Export
+#### 2.6.8 ST-43 -- Real-Time Stream CSV Export
 
-Ensure detection data can be exported as a CSV file during or after the stream session.
+Ensure detection data (timestamp, frame ID, detection count, per-class counts, FPS) can be exported as a downloadable CSV file during or after the streaming session.
+
+#### 2.6.9 ST-44 -- Quick Setup Instructions
+
+Verify that the quick setup instructions section displays correctly, guiding users through camera source configuration and stream control usage.
 
 ---
 
 ### 2.7 Profile Management System Tests
 
-#### 2.7.1 ST-39 -- Profile Page Load
+#### 2.7.1 ST-45 -- Profile Page Load
 
-Verify that the profile page displays the logged-in user's information (full name, username, email, phone, account status) with a profile avatar icon.
+Verify that the profile page loads correctly and displays the logged-in user's information: full name, username (read-only), email, phone number, and account status (Active/Inactive badge) with a profile avatar icon.
 
-#### 2.7.2 ST-40 -- Profile Edit Mode
+#### 2.7.2 ST-46 -- Profile Edit Mode Activation
 
-Ensure clicking the edit button enables editable fields for full name, email, and phone while keeping username read-only.
+Ensure clicking the edit button toggles the profile into edit mode, enabling input fields for full name, email, and phone while keeping the username field read-only and non-editable.
 
-#### 2.7.3 ST-41 -- Profile Update Flow
+#### 2.7.3 ST-47 -- Profile Update End-to-End Flow
 
-Validate that modifying profile fields and clicking save sends the update request, displays a success toast, and reflects the changes immediately.
+Validate that modifying profile fields (full name, email, phone) and clicking save sends the PUT request to `/auth/profile`, displays a success toast notification, and immediately reflects the updated information on the profile page.
 
-#### 2.7.4 ST-42 -- Cancel Profile Edit
+#### 2.7.4 ST-48 -- Cancel Profile Edit
 
-Verify that clicking cancel during editing reverts all fields to their original values.
+Verify that clicking the cancel button during profile editing reverts all modified fields to their original saved values and exits edit mode.
+
+#### 2.7.5 ST-49 -- Profile Update Validation
+
+Ensure that submitting invalid data during profile update (duplicate email, invalid phone format) displays an appropriate error toast notification and does not save the changes.
 
 ---
 
 ### 2.8 Navigation and Layout System Tests
 
-#### 2.8.1 ST-43 -- Navbar Rendering
+#### 2.8.1 ST-50 -- Navbar Rendering and Links
 
-Verify that the navigation bar displays the logo, navigation links (Home, Disease, Real-Time, Insect, Weed), current user info with avatar, and logout button.
+Verify that the sticky navigation bar displays the PlantGuard logo with application name, all navigation links (Home, Disease, Real-Time, Insect, Weed), the current user's name with avatar icon, and the logout button.
 
-#### 2.8.2 ST-44 -- Active Page Highlighting
+#### 2.8.2 ST-51 -- Active Page Highlighting
 
-Ensure the current page link is visually highlighted in the navbar.
+Ensure the navigation link corresponding to the currently active page is visually highlighted to indicate the user's current location within the application.
 
-#### 2.8.3 ST-45 -- Responsive Layout
+#### 2.8.3 ST-52 -- Responsive Layout (Mobile)
 
-Verify that all pages render correctly on mobile, tablet, and desktop viewports.
+Verify that all pages render correctly on mobile viewports (< 768px) with proper content stacking, readable text, and touch-friendly interactive elements.
 
-#### 2.8.4 ST-46 -- Toast Notifications
+#### 2.8.4 ST-53 -- Responsive Layout (Tablet and Desktop)
 
-Ensure success and error toast notifications display correctly for all user actions across the application.
+Ensure all pages render correctly on tablet (768px - 1024px) and desktop (> 1024px) viewports with appropriate grid layouts and spacing.
+
+#### 2.8.5 ST-54 -- Toast Notification System
+
+Verify that React Hot Toast notifications display correctly for all user actions: success toasts for successful operations (login, registration, profile update, detection complete) and error toasts for failures (invalid input, server errors, file size exceeded).
+
+#### 2.8.6 ST-55 -- Leaf Background Animation
+
+Ensure the animated leaf background component renders on all pages without obstructing content or degrading page performance.
 
 ---
 
 ### 2.9 Cross-System Integration Tests
 
-#### 2.9.1 ST-47 -- Frontend-Backend API Communication
+#### 2.9.1 ST-56 -- Frontend-Backend API Communication
 
-Verify that all Axios API calls correctly attach the JWT Bearer token and receive expected responses from FastAPI endpoints.
+Verify that all Axios API calls from the React frontend correctly attach the JWT Bearer token via the request interceptor and receive properly formatted JSON responses from the FastAPI backend.
 
-#### 2.9.2 ST-48 -- Database Persistence
+#### 2.9.2 ST-57 -- Database Persistence Across Restarts
 
-Ensure that user registration data persists correctly in `users.json` and survives application restarts.
+Ensure that user registration data persists correctly in `users.json` and remains accessible after both frontend and backend application restarts.
 
-#### 2.9.3 ST-49 -- File Upload and Storage
+#### 2.9.3 ST-58 -- File Upload and Static File Serving
 
-Verify that uploaded images are stored in the `uploads` directory and served correctly via the static file route.
+Verify that images uploaded through the disease, insect, and weed detection pages are stored in the backend `uploads` directory and can be served back correctly via the `/uploads` static route.
 
-#### 2.9.4 ST-50 -- Authentication State Persistence
+#### 2.9.4 ST-59 -- Authentication State Persistence on Refresh
 
-Ensure that refreshing the browser preserves the login state by reading tokens from localStorage and rehydrating the AuthContext.
+Ensure that refreshing the browser page preserves the user's login state by reading access and refresh tokens from localStorage and rehydrating the AuthContext with the current user data.
 
----
+#### 2.9.5 ST-60 -- WebSocket Connection with Token Authentication
 
-## 3. WebSocket and Real-Time Testing
-
-WebSocket testing validates the real-time bidirectional communication between the frontend and backend for live detection features.
-
-### 3.1 Weed Detection WebSocket Tests
-
-#### 3.1.1 WS-01 -- WebSocket Connection (Valid Token)
-
-Verify that connecting to `/weed/stream` with a valid JWT token in the query parameter successfully establishes a WebSocket connection and begins frame streaming.
-
-#### 3.1.2 WS-02 -- WebSocket Connection (Invalid Token)
-
-Ensure that connecting with an invalid or expired token results in an error message and connection closure.
-
-#### 3.1.3 WS-03 -- WebSocket Connection (Missing Token)
-
-Verify that attempting connection without a token parameter is rejected.
-
-#### 3.1.4 WS-04 -- Frame Streaming (JSON Metadata)
-
-Validate that the server sends JSON messages containing frame_id, detections count, summary (total, weeds, crops, weed_percentage), and predictions array with correct bounding box data.
-
-#### 3.1.5 WS-05 -- Frame Streaming (Binary JPEG Data)
-
-Ensure that binary JPEG frames are sent alternating with JSON metadata and can be rendered on the client canvas.
-
-#### 3.1.6 WS-06 -- Confidence Threshold Parameter
-
-Verify that the `confidence` query parameter (range 0.1 to 0.95) correctly adjusts detection sensitivity in real time.
-
-#### 3.1.7 WS-07 -- Custom Camera URL Parameter
-
-Ensure that the `cam_url` query parameter overrides the default IP camera URL and connects to the specified source.
-
-#### 3.1.8 WS-08 -- Frame Rate Control
-
-Verify that frames are delivered at the configured target FPS (2 FPS for weed detection) without significant deviation.
-
-#### 3.1.9 WS-09 -- Connection Drop Handling
-
-Ensure the system handles camera disconnection gracefully by sending an error message and closing the WebSocket cleanly.
-
-#### 3.1.10 WS-10 -- Multiple Concurrent Connections
-
-Verify that the server handles multiple simultaneous WebSocket connections for weed detection without performance degradation.
-
----
-
-### 3.2 YOLOv8 Real-Time WebSocket Tests
-
-#### 3.2.1 WS-11 -- WebSocket Connection and Connected Message
-
-Verify that connecting to `/realtime/detect` with a valid token sends a `"connected"` type message confirming stream initialization.
-
-#### 3.2.2 WS-12 -- WebSocket Authentication Failure
-
-Ensure invalid tokens return an error message and prevent stream from starting.
-
-#### 3.2.3 WS-13 -- Frame Message Structure
-
-Validate that each frame message includes type ("frame"), frame_id, detections count, class_counts dictionary, and size (byte length of JPEG).
-
-#### 3.2.4 WS-14 -- Binary Frame with Annotations
-
-Verify that binary JPEG frames contain YOLOv8 bounding box annotations drawn on the original image.
-
-#### 3.2.5 WS-15 -- Class-Wise Object Counting
-
-Ensure that `class_counts` correctly tallies each detected object class (e.g., person: 2, dog: 1) per frame.
-
-#### 3.2.6 WS-16 -- Confidence Threshold Adjustment
-
-Verify that the `confidence` parameter (default 0.45) filters out low-confidence detections from results.
-
-#### 3.2.7 WS-17 -- Camera Source Selection
-
-Ensure the `source` parameter correctly switches between device webcam (index 0) and IP camera URL.
-
-#### 3.2.8 WS-18 -- Target FPS Configuration
-
-Verify that frames are delivered at approximately the configured target FPS (15 FPS default) for smooth real-time display.
-
-#### 3.2.9 WS-19 -- Auto-Reconnect on Camera Failure
-
-Ensure the YOLO service handles camera disconnection and attempts reconnection with appropriate error messages.
-
-#### 3.2.10 WS-20 -- Stream Cleanup on Disconnect
-
-Verify that all resources (camera capture, model inference) are properly released when the WebSocket client disconnects.
-
----
-
-## 4. AI/ML Model Testing
-
-AI/ML model testing validates the accuracy, performance, and reliability of the machine learning models integrated into the PlantGuard platform.
-
-### 4.1 Plant Disease Detection Model Tests (MobileNetV2)
-
-#### 4.1.1 ML-01 -- Model Loading
-
-Verify that the HuggingFace MobileNetV2 model (`linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification`) and its image processor load successfully at application startup.
-
-#### 4.1.2 ML-02 -- Image Preprocessing
-
-Ensure input images are correctly processed by MobileNetV2ImageProcessor (resizing, normalization, tensor conversion) before inference.
-
-#### 4.1.3 ML-03 -- 39-Class Classification
-
-Verify that the model correctly classifies inputs across all 39 plant disease/healthy classes covering 14 crop species (Apple, Blueberry, Cherry, Corn, Grape, Orange, Peach, Pepper, Potato, Raspberry, Soybean, Squash, Strawberry, Tomato).
-
-#### 4.1.4 ML-04 -- Confidence Score Accuracy
-
-Ensure that the softmax probability output correctly represents prediction confidence and the percentage conversion is accurate.
-
-#### 4.1.5 ML-05 -- Healthy vs Diseased Classification
-
-Verify that the `is_healthy` flag is correctly derived from the predicted class label (True when label contains "healthy").
-
-#### 4.1.6 ML-06 -- Disease Info Mapping
-
-Ensure that predicted class names correctly map to cause and cure information from `disease_info.json`, with fallback values when no match is found.
-
-#### 4.1.7 ML-07 -- Class Names Loading
-
-Verify that `class_names.json` loads all 39 class labels correctly and indices match model output logits.
-
----
-
-### 4.2 Insect Detection Model Tests (Vision Transformer)
-
-#### 4.2.1 ML-08 -- ViT Model Loading
-
-Verify that the HuggingFace Vision Transformer model (`dima806/farm_insects_image_detection`) loads successfully.
-
-#### 4.2.2 ML-09 -- 15-Class Insect Classification
-
-Ensure the model correctly classifies all 15 farm insect/pest types: Fall Armyworms, Colorado Beetles, Aphids, Stem Borers, Bollworms, Grasshoppers, Mites, Mosquitoes, Sawflies, Lady Beetles, Fruit Flies, Bees, Ants, Wasps, and Moths.
-
-#### 4.2.3 ML-10 -- Insect Info Mapping
-
-Verify that predicted insect names correctly map to detailed information (description, affected_crops, damage, prevention, treatment) from `insect_info.json`.
-
-#### 4.2.4 ML-11 -- Confidence Threshold Behavior
-
-Ensure that low-confidence predictions still return valid insect names with appropriate confidence scores.
-
----
-
-### 4.3 Weed Detection Model Tests (Roboflow)
-
-#### 4.3.1 ML-12 -- Roboflow API Connectivity
-
-Verify that the Roboflow serverless API (`crop-and-weed-detection-gacus/1`) is reachable and responds with valid detection data.
-
-#### 4.3.2 ML-13 -- Crop/Weed Binary Classification
-
-Ensure the model correctly distinguishes between crops (class 0) and weeds (class 1) in field images.
-
-#### 4.3.3 ML-14 -- Bounding Box Accuracy
-
-Verify that returned bounding boxes (x, y, width, height) correctly localize detected crops and weeds in the image.
-
-#### 4.3.4 ML-15 -- Weed Percentage Calculation
-
-Ensure the weed percentage calculation (weeds / total detections * 100) is mathematically correct.
-
-#### 4.3.5 ML-16 -- Color Coding Assignment
-
-Verify that crops are assigned green color (`#22c55e`) and weeds are assigned red color (`#ef4444`) in the response.
-
-#### 4.3.6 ML-17 -- Confidence-Based Filtering
-
-Ensure that the confidence threshold parameter correctly filters detections below the specified threshold.
-
-#### 4.3.7 ML-18 -- Streaming Frame Processing
-
-Verify that continuous frame processing from IP camera maintains consistent detection quality without memory leaks.
-
----
-
-### 4.4 YOLOv8 Object Detection Model Tests
-
-#### 4.4.1 ML-19 -- YOLOv8 Nano Model Loading
-
-Verify that the YOLOv8 Nano model (`yolov8n.pt`) loads successfully from the Ultralytics framework.
-
-#### 4.4.2 ML-20 -- COCO 80-Class Detection
-
-Ensure the model detects objects across the full COCO dataset (80 classes including person, car, bicycle, dog, cat, etc.) in video frames.
-
-#### 4.4.3 ML-21 -- Bounding Box Annotation
-
-Verify that detected objects are annotated with bounding boxes and class labels drawn directly on the output JPEG frames.
-
-#### 4.4.4 ML-22 -- Per-Frame Detection Counting
-
-Ensure that per-frame class counts accurately reflect the number of each object type detected in the frame.
-
-#### 4.4.5 ML-23 -- Confidence Threshold Filtering
-
-Verify that the configurable confidence threshold (default 0.45) correctly filters low-confidence detections.
-
-#### 4.4.6 ML-24 -- Real-Time Performance
-
-Ensure the YOLOv8 Nano model maintains adequate inference speed (>= 15 FPS) for real-time video processing.
-
-#### 4.4.7 ML-25 -- Frame Encoding Quality
-
-Verify that output JPEG frames maintain sufficient visual quality for human interpretation while keeping file size manageable for WebSocket transmission.
+Verify that WebSocket connections for both weed streaming (`/weed/stream`) and real-time detection (`/realtime/detect`) correctly authenticate using the JWT token passed as a query parameter from the frontend.
 
 ---
 
 ## Summary
 
-| Testing Category                   | Test Count | Test ID Range     |
-|------------------------------------|------------|-------------------|
-| Unit Testing                       | 75         | UT-01 to UT-75    |
-| System Testing                     | 50         | ST-01 to ST-50    |
-| WebSocket and Real-Time Testing    | 20         | WS-01 to WS-20   |
-| AI/ML Model Testing               | 25         | ML-01 to ML-25    |
-| **Total**                          | **170**    |                   |
+| Testing Category | Test Count | Test ID Range  |
+|------------------|------------|----------------|
+| Unit Testing     | 93         | UT-01 to UT-93 |
+| System Testing   | 60         | ST-01 to ST-60 |
+| **Total**        | **153**    |                |
 
-This comprehensive testing plan covers all critical components of the PlantGuard platform, ensuring reliability and correctness across authentication, AI-powered detection, real-time streaming, and user interface workflows.
+This comprehensive testing plan covers all critical components of the PlantGuard AI-Powered Agricultural Intelligence Platform, ensuring reliability and correctness across backend API endpoints, authentication and security mechanisms, AI/ML model inference, real-time WebSocket communication, and frontend user interface workflows.

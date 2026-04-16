@@ -72,7 +72,12 @@ export default function ProfilePage() {
       setEditing(false)
       toast.success('Profile updated successfully!')
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Failed to update profile.')
+      const detail = err.response?.data?.detail
+      if (Array.isArray(detail)) {
+        detail.forEach((e) => toast.error(e.msg || 'Validation error'))
+      } else {
+        toast.error(detail || 'Failed to update profile.')
+      }
     } finally {
       setSaving(false)
     }

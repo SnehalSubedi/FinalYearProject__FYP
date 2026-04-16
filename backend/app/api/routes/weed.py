@@ -76,17 +76,25 @@ async def weed_realtime_stream(
     Sends alternating JSON metadata + binary JPEG frames.
     Client can pass cam_url to override default IP camera address.
     """
+    await websocket.accept()
+
     # ── Authenticate via token query param ──
     if is_token_blacklisted(token):
-        await websocket.close(code=4001, reason="Token blacklisted")
+        await websocket.send_json({
+            "type": "error",
+            "message": "Token has been invalidated. Please log in again.",
+        })
+        await websocket.close()
         return
 
     payload = decode_token(token)
-    if payload is None:
-        await websocket.close(code=4001, reason="Invalid or expired token")
+    if payload is None or payload.get("type") != "access":
+        await websocket.send_json({
+            "type": "error",
+            "message": "Invalid or expired token. Please log in again.",
+        })
+        await websocket.close()
         return
-
-    await websocket.accept()
 
     try:
         await stream_weed_detections(
@@ -98,6 +106,6 @@ async def weed_realtime_stream(
         pass
     except Exception as e:
         try:
-            await websocket.send_json({"error": str(e)})
+            await websocket.send_json({"type": "error", "message": str(e)})
         except Exception:
             pass

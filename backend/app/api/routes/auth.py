@@ -194,10 +194,16 @@ def register(data: UserRegisterRequest):
 def login(data: LoginRequest):
     user = get_user_by_username(data.username) or get_user_by_email(data.username)
 
-    if not user or not verify_password(data.password, user["hashed_password"]):
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username or password.",
+            detail="No account found with that username or email.",
+        )
+
+    if not verify_password(data.password, user["hashed_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect password.",
         )
 
     if not user.get("is_active", True):
