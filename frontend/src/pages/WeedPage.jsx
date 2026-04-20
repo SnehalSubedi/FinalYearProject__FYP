@@ -7,6 +7,11 @@ import {
   PolarAngleAxis, PolarRadiusAxis, ComposedChart, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts'
+import {
+  LeafIcon, SproutIcon, ChartIcon, SearchIcon, TargetIcon, ShieldIcon,
+  PieIcon, TrendUpIcon, TrendDownIcon, FilmIcon, RadarIcon, ArrowUpIcon,
+  SquareIcon, RepeatIcon,
+} from '../components/Icons'
 
 const CHART_COLORS = { crop: '#22c55e', weed: '#ef4444', neutral: '#6366f1', area: '#f59e0b', accent: '#06b6d4' }
 const PIE_COLORS = ['#22c55e', '#ef4444']
@@ -276,7 +281,7 @@ export default function WeedPage() {
         <div className="mb-6 flex items-center gap-4">
           <img src={logoImg} alt="PlantGuard" className="h-12 w-auto object-contain hidden sm:block" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">🌿 Real-Time Weed Detection</h1>
+            <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2"><LeafIcon className="w-6 h-6 text-green-600" /> Real-Time Weed Detection</h1>
             <p className="text-gray-500 mt-1 text-sm">Connect your IP camera to detect weeds in crop fields in real-time using AI.</p>
           </div>
         </div>
@@ -334,15 +339,15 @@ export default function WeedPage() {
         {isStreaming && streamStats && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
             {[
-              { label: 'Frame', value: `#${streamStats.frame_id}`, icon: '🎬', bg: 'bg-gray-50', border: 'border-gray-200', text: 'text-gray-700' },
-              { label: 'Total Detections', value: streamStats.detections, icon: '📡', bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700' },
-              { label: 'Crops (Live)', value: streamStats.summary?.crops ?? 0, icon: '🌱', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700' },
-              { label: 'Weeds (Live)', value: streamStats.summary?.weeds ?? 0, icon: '🌿', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
-              { label: 'Peak Weeds', value: peakWeeds, icon: '🔝', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700' },
-              { label: 'Weed Coverage', value: `${streamStats.summary?.weed_percentage ?? 0}%`, icon: (streamStats.summary?.weed_percentage ?? 0) > 50 ? '🟥' : '🟨', bg: (streamStats.summary?.weed_percentage ?? 0) > 50 ? 'bg-red-50' : 'bg-yellow-50', border: (streamStats.summary?.weed_percentage ?? 0) > 50 ? 'border-red-200' : 'border-yellow-200', text: (streamStats.summary?.weed_percentage ?? 0) > 50 ? 'text-red-700' : 'text-yellow-700' },
+              { label: 'Frame', value: `#${streamStats.frame_id}`, Icon: FilmIcon, iconColor: 'text-gray-600', bg: 'bg-gray-50', border: 'border-gray-200', text: 'text-gray-700' },
+              { label: 'Total Detections', value: streamStats.detections, Icon: RadarIcon, iconColor: 'text-indigo-500', bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700' },
+              { label: 'Crops (Live)', value: streamStats.summary?.crops ?? 0, Icon: SproutIcon, iconColor: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700' },
+              { label: 'Weeds (Live)', value: streamStats.summary?.weeds ?? 0, Icon: LeafIcon, iconColor: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
+              { label: 'Peak Weeds', value: peakWeeds, Icon: ArrowUpIcon, iconColor: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700' },
+              { label: 'Weed Coverage', value: `${streamStats.summary?.weed_percentage ?? 0}%`, Icon: SquareIcon, iconColor: (streamStats.summary?.weed_percentage ?? 0) > 50 ? 'text-red-500' : 'text-yellow-500', bg: (streamStats.summary?.weed_percentage ?? 0) > 50 ? 'bg-red-50' : 'bg-yellow-50', border: (streamStats.summary?.weed_percentage ?? 0) > 50 ? 'border-red-200' : 'border-yellow-200', text: (streamStats.summary?.weed_percentage ?? 0) > 50 ? 'text-red-700' : 'text-yellow-700' },
             ].map((m) => (
               <div key={m.label} className={`${m.bg} ${m.border} border rounded-xl p-4 flex flex-col items-center text-center`}>
-                <span className="text-2xl mb-1">{m.icon}</span>
+                <m.Icon className={`w-6 h-6 mb-1 ${m.iconColor}`} />
                 <span className={`text-xl font-bold ${m.text}`}>{m.value}</span>
                 <span className="text-xs text-gray-500 mt-0.5">{m.label}</span>
               </div>
@@ -384,7 +389,7 @@ export default function WeedPage() {
           {/* Stats Sidebar */}
           <div className="lg:col-span-4 space-y-4">
             <div className="bg-white rounded-2xl shadow-sm border p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">📊 Session Summary</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5"><ChartIcon className="w-4 h-4 text-indigo-500" /> Session Summary</h3>
               {streamStats ? (
                 <div className="space-y-2">
                   {[
@@ -421,14 +426,14 @@ export default function WeedPage() {
             {/* Live Detections */}
             {streamPredictions.length > 0 && (
               <div className="bg-white rounded-2xl shadow-sm border p-4">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">🔍 Live Detections</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5"><SearchIcon className="w-4 h-4 text-indigo-500" /> Live Detections</h3>
                 <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1">
                   {streamPredictions.map((pred, i) => {
                     const isWeed = pred.label === 'Weed'
                     return (
                       <div key={i} className={`flex items-center justify-between rounded-lg px-3 py-2 border ${isWeed ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-sm">{isWeed ? '🌿' : '🌱'}</span>
+                          {isWeed ? <LeafIcon className="w-4 h-4 text-red-500" /> : <SproutIcon className="w-4 h-4 text-green-600" />}
                           <span className={`font-semibold text-xs ${isWeed ? 'text-red-600' : 'text-green-600'}`}>{pred.label}</span>
                         </div>
                         <span className="text-gray-400 text-xs">{pred.confidence}%</span>
@@ -445,7 +450,7 @@ export default function WeedPage() {
         {detectionHistory.length > 2 && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-800">📉 Detection Analytics</h2>
+              <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2"><TrendDownIcon className="w-5 h-5 text-indigo-500" /> Detection Analytics</h2>
               <button onClick={exportCSV}
                 className="flex items-center gap-2 text-sm text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-colors">
                 <DownloadIcon /> Export Data
@@ -456,7 +461,7 @@ export default function WeedPage() {
               {/* Crop vs Weed Pie */}
               {pieData.length > 0 && (
                 <div className="bg-white rounded-2xl shadow-sm border p-5">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-4">🥧 Crop vs Weed Distribution</h3>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-1.5"><PieIcon className="w-4 h-4 text-indigo-500" /> Crop vs Weed Distribution</h3>
                   <ResponsiveContainer width="100%" height={230}>
                     <PieChart>
                       <Pie data={pieData} cx="50%" cy="50%" outerRadius={80} innerRadius={40} paddingAngle={3} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
@@ -470,7 +475,7 @@ export default function WeedPage() {
 
               {/* Weed vs Crop Over Time */}
               <div className="bg-white rounded-2xl shadow-sm border p-5">
-                <h3 className="text-sm font-semibold text-gray-700 mb-4">📈 Weed vs Crop Over Time</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-1.5"><TrendUpIcon className="w-4 h-4 text-green-500" /> Weed vs Crop Over Time</h3>
                 <ResponsiveContainer width="100%" height={230}>
                   <LineChart data={detectionHistory}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -486,7 +491,7 @@ export default function WeedPage() {
 
               {/* Weed Coverage Trend */}
               <div className="bg-white rounded-2xl shadow-sm border p-5">
-                <h3 className="text-sm font-semibold text-gray-700 mb-4">📉 Weed Coverage Trend</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-1.5"><TrendDownIcon className="w-4 h-4 text-red-500" /> Weed Coverage Trend</h3>
                 <ResponsiveContainer width="100%" height={230}>
                   <AreaChart data={detectionHistory}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -506,7 +511,7 @@ export default function WeedPage() {
 
               {/* Cumulative Trend */}
               <div className="bg-white rounded-2xl shadow-sm border p-5">
-                <h3 className="text-sm font-semibold text-gray-700 mb-4">📊 Cumulative Detections</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-1.5"><ChartIcon className="w-4 h-4 text-indigo-500" /> Cumulative Detections</h3>
                 <ResponsiveContainer width="100%" height={230}>
                   <AreaChart data={cumulativeData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -522,7 +527,7 @@ export default function WeedPage() {
 
               {/* Confidence Distribution */}
               <div className="bg-white rounded-2xl shadow-sm border p-5">
-                <h3 className="text-sm font-semibold text-gray-700 mb-4">🎯 Confidence Distribution</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-1.5"><TargetIcon className="w-4 h-4 text-indigo-500" /> Confidence Distribution</h3>
                 <ResponsiveContainer width="100%" height={230}>
                   <BarChart data={confidenceDistribution}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -538,7 +543,7 @@ export default function WeedPage() {
 
               {/* Performance Radar */}
               <div className="bg-white rounded-2xl shadow-sm border p-5">
-                <h3 className="text-sm font-semibold text-gray-700 mb-4">🛡️ Detection Overview</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-1.5"><ShieldIcon className="w-4 h-4 text-blue-500" /> Detection Overview</h3>
                 <ResponsiveContainer width="100%" height={230}>
                   <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="70%">
                     <PolarGrid stroke="#e5e7eb" />
@@ -552,7 +557,7 @@ export default function WeedPage() {
 
               {/* Combined: Stacked bar + weed % line (full width) */}
               <div className="bg-white rounded-2xl shadow-sm border p-5 lg:col-span-3">
-                <h3 className="text-sm font-semibold text-gray-700 mb-4">🔄 Detections per Frame with Weed Coverage (Dual Axis)</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-1.5"><RepeatIcon className="w-4 h-4 text-indigo-500" /> Detections per Frame with Weed Coverage (Dual Axis)</h3>
                 <ResponsiveContainer width="100%" height={260}>
                   <ComposedChart data={detectionHistory}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -573,8 +578,8 @@ export default function WeedPage() {
 
         {/* Legend */}
         <div className="flex gap-6 mt-6 text-sm text-gray-500 justify-center">
-          <div className="flex items-center gap-2">🌱 <span>Crop (desired)</span></div>
-          <div className="flex items-center gap-2">🌿 <span>Weed (unwanted)</span></div>
+          <div className="flex items-center gap-2"><SproutIcon className="w-4 h-4 text-green-600" /> <span>Crop (desired)</span></div>
+          <div className="flex items-center gap-2"><LeafIcon className="w-4 h-4 text-red-500" /> <span>Weed (unwanted)</span></div>
         </div>
       </div>
     </div>

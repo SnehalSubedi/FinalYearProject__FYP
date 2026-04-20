@@ -45,6 +45,41 @@ const RecordIcon = () => (
     <circle cx="12" cy="12" r="6" />
   </svg>
 )
+const ChartIcon = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /><line x1="3" y1="20" x2="21" y2="20" />
+  </svg>
+)
+const SearchIcon = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+  </svg>
+)
+const TargetIcon = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" />
+  </svg>
+)
+const InfoIcon = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+  </svg>
+)
+const CameraIcon = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" />
+  </svg>
+)
+const GlobeIcon = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+)
+const SaveIcon = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" />
+  </svg>
+)
 
 const CHART_COLORS = { primary: '#6366f1', secondary: '#8b5cf6', accent: '#06b6d4', success: '#22c55e', warning: '#f59e0b', danger: '#ef4444' }
 const PIE_COLORS = ['#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#06b6d4', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#64748b']
@@ -445,7 +480,7 @@ export default function RealtimePage() {
           <div className="lg:col-span-4 space-y-4">
             {/* Detailed Stats Card */}
             <div className="bg-white rounded-2xl shadow-sm border p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">\uD83D\uDCCA Performance Stats</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2"><ChartIcon className="w-4 h-4 text-indigo-500" /> Performance Stats</h3>
               {streaming ? (
                 <div className="space-y-2">
                   {[
@@ -466,7 +501,7 @@ export default function RealtimePage() {
 
             {/* Object Counting Card */}
             <div className="bg-white rounded-2xl shadow-sm border p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">\uD83D\uDD0D Detected Objects (Live)</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2"><SearchIcon className="w-4 h-4 text-indigo-500" /> Detected Objects (Live)</h3>
               {Object.keys(classCounts).length > 0 ? (
                 <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
                   {Object.entries(classCounts).sort((a, b) => b[1] - a[1]).map(([cls, count]) => (
@@ -483,7 +518,7 @@ export default function RealtimePage() {
 
             {/* Cumulative Object Counts Card */}
             <div className="bg-white rounded-2xl shadow-sm border p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">\uD83C\uDFAF Total Object Count</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2"><TargetIcon className="w-4 h-4 text-indigo-500" /> Total Object Count</h3>
               {Object.keys(totalClassCounts).length > 0 ? (
                 <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
                   {Object.entries(totalClassCounts).sort((a, b) => b[1] - a[1]).map(([cls, count]) => (
@@ -505,12 +540,12 @@ export default function RealtimePage() {
 
             {!streaming && (
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-xs text-blue-700">
-                <p className="font-semibold mb-1.5 flex items-center gap-1">\u2139\uFE0F Quick Setup</p>
+                <p className="font-semibold mb-1.5 flex items-center gap-1"><InfoIcon className="w-4 h-4 text-blue-500" /> Quick Setup</p>
                 <ul className="space-y-0.5 text-blue-600">
-                  <li>\uD83D\uDCF7 Webcam: Select "Device Webcam" and start</li>
-                  <li>\uD83C\uDF10 IP Cam: Enter address like 192.168.1.5:8080</li>
-                  <li>\uD83C\uDFAF Adjust confidence to filter weak detections</li>
-                  <li>\uD83D\uDCBE Use Record & Export after streaming</li>
+                  <li className="flex items-center gap-1.5"><CameraIcon className="w-3.5 h-3.5 shrink-0" /> Webcam: Select "Device Webcam" and start</li>
+                  <li className="flex items-center gap-1.5"><GlobeIcon className="w-3.5 h-3.5 shrink-0" /> IP Cam: Enter address like 192.168.1.5:8080</li>
+                  <li className="flex items-center gap-1.5"><TargetIcon className="w-3.5 h-3.5 shrink-0" /> Adjust confidence to filter weak detections</li>
+                  <li className="flex items-center gap-1.5"><SaveIcon className="w-3.5 h-3.5 shrink-0" /> Use Record & Export after streaming</li>
                 </ul>
               </div>
             )}
